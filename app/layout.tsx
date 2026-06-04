@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,11 +9,12 @@ const inter = Inter({
   display: "swap",
 });
 
-const newsreader = Newsreader({
-  variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["300", "400", "500"],
-  style: ["normal", "italic"],
+// Alpha-Lyrae (Vega Protocol, SIL OFL 1.1) — our display / brand face. Single
+// weight (Medium); self-hosted from app/fonts (license: app/fonts/OFL.md).
+const alphaLyrae = localFont({
+  variable: "--font-display",
+  src: "./fonts/AlphaLyrae-Medium.woff2",
+  weight: "500",
   display: "swap",
 });
 
@@ -28,7 +30,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${newsreader.variable}`}>
+    <html lang="en" className={`${inter.variable} ${alphaLyrae.variable}`}>
       <body>{children}</body>
     </html>
   );

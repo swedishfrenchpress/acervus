@@ -9,8 +9,10 @@ export default function Home() {
     <main className={styles.page}>
       <Celestial />
       <Nav />
-      <Hero />
-      <BookShelf />
+      <div className={styles.composition}>
+        <Hero />
+        <BookShelf />
+      </div>
     </main>
   );
 }

@@ -1,11 +1,10 @@
 import styles from "./Nav.module.css";
+import GlitchLogo from "./GlitchLogo";
 
 export default function Nav() {
   return (
     <header className={styles.nav}>
-      <a href="#" className={styles.logo}>
-        Acervus
-      </a>
+      <GlitchLogo />
       <nav className={styles.links}>
         <a href="#" className={styles.link}>
           About us

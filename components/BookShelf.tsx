@@ -4,22 +4,35 @@ import { useEffect, useRef } from "react";
 import { books } from "@/lib/books";
 import styles from "./bookshelf.module.css";
 
-// Hover-spread tuning (matches the reference build session).
-const PUSH_PX = 130; // how far the immediate neighbour is shoved
-const FALLOFF = 0.55; // each farther neighbour moves FALLOFF× as much
-const REACH = 7; // neighbours affected on each side
-const SPEED = 0.45; // marquee px per frame (leftward)
+// Marquee + proximity tuning.
+const SPEED = 0.45; // base marquee px per frame (leftward)
+const RADIUS = 230; // px: horizontal reach of the cursor's influence
+const VRADIUS = 260; // px: vertical reach (the band is tall — fall off above the row)
+const SHARP = 2.4; // gaussian sharpness; higher = tighter, more selective focus
+const PART = 150; // px: how far the row parts around the cursor
+const LIFT = 26; // px: the focal book rises
+const POP = 74; // px: the focal book comes toward you (translateZ)
+const TURN = 24; // deg: the focal book turns to face you (net rotateY ~ 0)
+const SCALE = 0.08; // focal book scale bump
+const SLOW = 0.9; // how much peak focus slows the marquee (1 = full stop)
+const EASE = 0.16; // per-frame approach to target — the "breathing" smoothness
 
 export default function BookShelf() {
   const trackRef = useRef<HTMLDivElement>(null);
   const bookEls = useRef<HTMLDivElement[]>([]);
-  const paused = useRef(false);
+
+  // Pointer in client coords; null when the cursor isn't over the shelf.
+  const pointer = useRef<{ x: number; y: number } | null>(null);
+
+  // Smoothed per-book state, eased toward target every frame.
+  const focus = useRef<number[]>([]); // even gaussian — how "looked at" a book is
+  const push = useRef<number[]>([]); // signed parting offset in px
+  const slow = useRef(0); // smoothed marquee slowdown, 0..1
 
   // Render the set three times so the track always overflows the viewport and
   // there is room to loop seamlessly.
   const rendered = [...books, ...books, ...books];
 
-  // ---- infinite marquee ------------------------------------------------
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -47,12 +60,71 @@ export default function BookShelf() {
     };
     window.addEventListener("resize", onResize);
 
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+    // Normalizer so the odd "parting" curve peaks at ~1 before scaling by PART.
+    const ODD_NORM = Math.sqrt(2 * SHARP * Math.E);
+
     const tick = () => {
-      if (!paused.current) {
-        offset -= SPEED;
-        if (-offset >= setWidth) offset += setWidth;
-        track.style.transform = `translate3d(${offset}px,0,0)`;
+      const els = bookEls.current;
+      const p = pointer.current;
+      const f = focus.current;
+      const pr = push.current;
+
+      // --- pass 1: read every book's on-screen centre (reads only, no writes,
+      // so the layout is flushed exactly once per frame) ---
+      const cx: number[] = [];
+      const cy: number[] = [];
+      for (let i = 0; i < els.length; i++) {
+        const el = els[i];
+        if (!el) {
+          cx[i] = NaN;
+          continue;
+        }
+        const r = el.getBoundingClientRect();
+        cx[i] = r.left + r.width / 2;
+        cy[i] = r.top + r.height / 2;
       }
+
+      // --- compute eased targets ---
+      let peak = 0;
+      for (let i = 0; i < els.length; i++) {
+        let targetF = 0;
+        let targetPush = 0;
+        if (p && !Number.isNaN(cx[i])) {
+          const ux = (p.x - cx[i]) / RADIUS;
+          const uy = (p.y - cy[i]) / VRADIUS;
+          // even gaussian in 2D: the book under the cursor peaks at 1
+          targetF = Math.exp(-(ux * ux + uy * uy) * SHARP);
+          // odd gaussian-derivative: zero at the cursor, parts books away from it
+          const odd = -ux * Math.exp(-(ux * ux) * SHARP) * ODD_NORM;
+          targetPush = Math.max(-1, Math.min(1, odd)) * PART;
+        }
+        f[i] = lerp(f[i] ?? 0, targetF, EASE);
+        pr[i] = lerp(pr[i] ?? 0, targetPush, EASE);
+        if (f[i] > peak) peak = f[i];
+      }
+      slow.current = lerp(slow.current, p ? peak : 0, EASE);
+
+      // --- pass 2: write transforms (writes only) ---
+      for (let i = 0; i < els.length; i++) {
+        const el = els[i];
+        if (!el) continue;
+        const fi = f[i];
+        el.style.setProperty("--push", `${pr[i].toFixed(2)}px`);
+        el.style.setProperty("--lift", `${(-LIFT * fi).toFixed(2)}px`);
+        el.style.setProperty("--pop", `${(POP * fi).toFixed(2)}px`);
+        el.style.setProperty("--turn", `${(TURN * fi).toFixed(2)}deg`);
+        el.style.setProperty("--scale", (1 + SCALE * fi).toFixed(3));
+        el.style.setProperty("--foc", fi.toFixed(3));
+        el.style.zIndex = fi > 0.02 ? String(5 + Math.round(fi * 12)) : "";
+      }
+
+      // Advance the marquee; it eases toward a near-stop as you focus a book,
+      // then drifts back up to speed when the cursor leaves.
+      offset -= SPEED * (1 - SLOW * slow.current);
+      if (-offset >= setWidth) offset += setWidth;
+      track.style.transform = `translate3d(${offset.toFixed(2)}px,0,0)`;
+
       raf = requestAnimationFrame(tick);
     };
     raf = requestAnimationFrame(tick);
@@ -63,55 +135,19 @@ export default function BookShelf() {
     };
   }, []);
 
-  // ---- hover spread ----------------------------------------------------
-  const resetTimer = useRef<number | null>(null);
-
-  const applySpread = (hovered: number) => {
-    bookEls.current.forEach((el, i) => {
-      if (!el) return;
-      let push = 0;
-      if (hovered >= 0 && i !== hovered) {
-        const d = i - hovered;
-        const ad = Math.abs(d);
-        if (ad <= REACH) push = Math.sign(d) * PUSH_PX * FALLOFF ** (ad - 1);
-      }
-      el.style.setProperty("--push", `${push}px`);
-      el.dataset.hover = hovered === i ? "true" : "false";
-    });
+  const onMove = (e: React.PointerEvent) => {
+    pointer.current = { x: e.clientX, y: e.clientY };
   };
-
-  const clearReset = () => {
-    if (resetTimer.current !== null) {
-      clearTimeout(resetTimer.current);
-      resetTimer.current = null;
-    }
+  const onLeave = () => {
+    pointer.current = null;
   };
-
-  const reset = () => {
-    clearReset();
-    paused.current = false;
-    applySpread(-1);
-  };
-
-  // Hovering a book pauses the marquee and spreads its neighbours.
-  const onBookEnter = (i: number) => {
-    clearReset();
-    paused.current = true;
-    applySpread(i);
-  };
-
-  // Snap back as soon as the cursor leaves a book. The tiny delay only bridges
-  // the instant when sliding from one adjacent book to the next.
-  const onBookLeave = () => {
-    clearReset();
-    resetTimer.current = window.setTimeout(reset, 80);
-  };
-
-  useEffect(() => clearReset, []);
 
   return (
-    <div className={styles.shelf} onMouseLeave={reset}>
-      <div className={styles.floor} />
+    <div
+      className={styles.shelf}
+      onPointerMove={onMove}
+      onPointerLeave={onLeave}
+    >
       <div className={styles.stage}>
         <div className={styles.tilt}>
           <div className={styles.track} ref={trackRef}>
@@ -122,9 +158,6 @@ export default function BookShelf() {
                   if (el) bookEls.current[i] = el;
                 }}
                 className={styles.book}
-                data-hover="false"
-                onMouseEnter={() => onBookEnter(i)}
-                onMouseLeave={onBookLeave}
                 style={
                   {
                     "--cover": b.color,

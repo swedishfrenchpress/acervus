@@ -1,9 +1,10 @@
 .shelf {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: clamp(380px, 60vh, 760px);
+  position: relative;
+  /* in-flow now (centred with the hero by .composition); flex must not collapse
+     its height, since the 3D children are absolutely positioned */
+  flex: 0 0 auto;
+  width: 100%;
+  height: clamp(340px, 46vh, 560px);
   z-index: 3;
   overflow: hidden; /* clip the looping track at the viewport edges */
 
@@ -17,20 +18,6 @@
   --book-ry: -44deg; /* counter-rotate so covers stay face-on (net ~-24) */
   --book-w: 172px;
   --book-overlap: 74px;
-}
-
-/* soft contact shadow / grounding at the base */
-.floor {
-  position: absolute;
-  inset: auto 0 0 0;
-  height: 42%;
-  background: radial-gradient(
-    120% 100% at 42% 100%,
-    rgba(40, 36, 18, 0.16) 0%,
-    rgba(40, 36, 18, 0) 60%
-  );
-  z-index: 1;
-  pointer-events: none;
 }
 
 .stage {
@@ -59,6 +46,8 @@
 }
 
 /* ---- a single 3D book ---- */
+/* The proximity loop in BookShelf.tsx eases these vars every frame, so the
+   book itself carries no CSS transition — JS owns the smoothing. */
 .book {
   position: relative;
   flex: 0 0 auto;
@@ -66,8 +55,10 @@
   height: var(--h);
   margin-left: calc(-1 * var(--book-overlap));
   transform-style: preserve-3d;
-  transform: translateX(var(--push, 0px)) rotateY(var(--book-ry));
-  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transform: translateX(var(--push, 0px)) translateY(var(--lift, 0px))
+    translateZ(var(--pop, 0px))
+    rotateY(calc(var(--book-ry) + var(--turn, 0deg))) scale(var(--scale, 1));
+  will-change: transform;
 }
 
 .book:first-child {
@@ -88,11 +79,16 @@
   transform: translate(-50%, -50%) translateZ(calc(var(--t) / 2));
   background: var(--cover);
   border-radius: 2px 5px 5px 2px;
+  /* The last layer is the elevation shadow; it grows with --foc (0..1) as the
+     book is drawn toward the viewer. */
   box-shadow:
     inset 7px 0 16px rgba(0, 0, 0, 0.28),
     inset -3px 0 8px rgba(255, 255, 255, 0.08),
     inset 0 0 0 1px rgba(0, 0, 0, 0.14),
-    0 20px 30px rgba(40, 36, 18, 0.26);
+    0 13px 20px rgba(40, 36, 18, 0.3),
+    0 calc(20px * var(--foc, 0)) calc(36px * var(--foc, 0))
+      rgba(40, 36, 18, calc(0.22 * var(--foc, 0)));
+  filter: brightness(calc(1 + 0.06 * var(--foc, 0)));
   overflow: hidden;
 }
 
@@ -136,20 +132,6 @@
   transform: translate(-50%, -50%) rotateX(90deg)
     translateZ(calc(var(--h) / 2));
   background: linear-gradient(#efe9da, #d4ccb6);
-}
-
-/* ---- hover: lift, face the viewer, sit forward ---- */
-.book[data-hover="true"] {
-  transform: translateX(var(--push, 0px)) translateY(-30px) translateZ(80px)
-    rotateY(calc(-1 * var(--tilt-ry))) scale(1.07);
-  z-index: 5;
-}
-
-.book[data-hover="true"] .cover {
-  box-shadow:
-    inset 7px 0 16px rgba(0, 0, 0, 0.2),
-    inset 0 0 0 1px rgba(0, 0, 0, 0.14),
-    0 34px 50px rgba(40, 36, 18, 0.34);
 }
 
 /* keep the shelf a tidy bottom band on small screens */
