@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import { books } from "@/lib/books";
 import styles from "./bookshelf.module.css";
 
@@ -19,7 +20,9 @@ const EASE = 0.16; // per-frame approach to target — the "breathing" smoothnes
 
 export default function BookShelf() {
   const trackRef = useRef<HTMLDivElement>(null);
-  const bookEls = useRef<HTMLDivElement[]>([]);
+  // Holds both placeholder <div>s and the real book's <a> — the proximity loop
+  // only reads getBoundingClientRect / style, which every HTMLElement has.
+  const bookEls = useRef<HTMLElement[]>([]);
 
   // Pointer in client coords; null when the cursor isn't over the shelf.
   const pointer = useRef<{ x: number; y: number } | null>(null);
@@ -151,26 +154,60 @@ export default function BookShelf() {
       <div className={styles.stage}>
         <div className={styles.tilt}>
           <div className={styles.track} ref={trackRef}>
-            {rendered.map((b, i) => (
-              <div
-                key={i}
-                ref={(el) => {
-                  if (el) bookEls.current[i] = el;
-                }}
-                className={styles.book}
-                style={
-                  {
-                    "--cover": b.color,
-                    "--h": `${b.h}px`,
-                    "--t": `${b.t}px`,
-                  } as React.CSSProperties
-                }
-              >
-                <span className={styles.cover} />
-                <span className={styles.pages} />
-                <span className={styles.topface} />
-              </div>
-            ))}
+            {rendered.map((b, i) => {
+              const setRef = (el: HTMLElement | null) => {
+                if (el) bookEls.current[i] = el;
+              };
+              const style = {
+                "--cover": b.color,
+                "--h": `${b.h}px`,
+                "--t": `${b.t}px`,
+              } as React.CSSProperties;
+              const faces = (
+                <>
+                  {b.cover ? (
+                    // Decorative — the <a>'s aria-label carries the name. Rides the
+                    // same .cover 3D face (sheen, shadow, brightness) as placeholders.
+                    <img
+                      className={styles.cover}
+                      src={b.cover}
+                      alt=""
+                      aria-hidden
+                      draggable={false}
+                    />
+                  ) : (
+                    <span className={styles.cover} />
+                  )}
+                  <span className={styles.pages} />
+                  <span className={styles.topface} />
+                </>
+              );
+
+              // A `slug` makes the book real: a focusable, clickable link.
+              return b.slug ? (
+                <Link
+                  key={i}
+                  ref={setRef}
+                  href={`/book/${b.slug}`}
+                  className={`${styles.book} ${styles.linked}`}
+                  style={style}
+                  aria-label={`${b.title} by ${b.author}`}
+                  draggable={false}
+                >
+                  {faces}
+                </Link>
+              ) : (
+                <div
+                  key={i}
+                  ref={setRef}
+                  className={styles.book}
+                  style={style}
+                  aria-hidden
+                >
+                  {faces}
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

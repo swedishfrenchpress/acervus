@@ -1,15 +1,32 @@
-// Placeholder book data — plain colored blocks for now.
-// Later: add a `cover` image path to each entry and swap the colored
-// `.cover` div for an <img> in BookShelf (the box is already sized/clipped).
+// Book data. Most entries are still plain colored blocks (placeholders); a book
+// becomes "real" — and clickable, with a cover image and a /book/[slug] page —
+// once it carries a `slug`. The marquee only reads `color`/`h`/`t`, so adding
+// the optional fields below leaves every placeholder untouched.
 
 export type Book = {
   id: number;
-  /** Solid placeholder cover color (becomes an <img> later). */
+  /** Placeholder cover color — and the fallback bg behind a real cover image. */
   color: string;
   /** Cover height in px — varied so the row reads as real, mismatched books. */
   h: number;
   /** Book thickness (spine depth) in px. */
   t: number;
+
+  // --- present only on real books (a `slug` makes the book clickable) ---
+  /** URL slug → /book/[slug]. */
+  slug?: string;
+  title?: string;
+  author?: string;
+  /** Series / collection label shown above the title. */
+  series?: string;
+  /** Cover image path, served from /public. */
+  cover?: string;
+  /** PDF path, served from /public. */
+  pdf?: string;
+  /** Short blurb for the book-view page. */
+  description?: string;
+  year?: number;
+  pages?: number;
 };
 
 // A tasteful, varied palette echoing the reference's literary covers.
@@ -40,3 +57,29 @@ export const books: Book[] = PALETTE.map(([color, h, t], i) => ({
   h,
   t,
 }));
+
+// --- the first real book ---
+// Overlaid in place onto the deep-teal slot (index 8): keeping its id/color/h/t
+// means the marquee's geometry is unchanged, while the teal spine/edges sit well
+// behind a teal-on-black cover. Replace in place — never push a 19th entry, since
+// BookShelf measures one set width as `books.length`.
+const FINNEY = 8;
+books[FINNEY] = {
+  ...books[FINNEY],
+  slug: "protecting-privacy-with-electronic-cash",
+  title: "Protecting Privacy with Electronic Cash",
+  author: "Hal Finney",
+  series: "A Cypherpunk's Library",
+  cover: "/covers/protecting-privacy-with-electronic-cash.png",
+  pdf: "/books/protecting-privacy-with-electronic-cash.pdf",
+  description:
+    "Hal Finney's early case for digital cash that preserves anonymity: a " +
+    "demonstration that electronic payment need not mean electronic surveillance.",
+  year: 1993,
+  pages: 7,
+};
+
+/** Look up a book by its URL slug (undefined for placeholders / unknown slugs). */
+export function getBookBySlug(slug: string): Book | undefined {
+  return books.find((b) => b.slug === slug);
+}

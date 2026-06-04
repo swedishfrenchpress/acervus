@@ -65,7 +65,11 @@
   margin-left: 0;
 }
 
-.book > span {
+/* Every face — the placeholder spans AND the real cover <img> — is centered in
+   the book box, then pushed to its plane by its own transform. The <img> must be
+   included here or it falls into normal flow and detaches from pages/top-face. */
+.book > span,
+.book > img {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -90,6 +94,24 @@
       rgba(40, 36, 18, calc(0.22 * var(--foc, 0)));
   filter: brightness(calc(1 + 0.06 * var(--foc, 0)));
   overflow: hidden;
+}
+
+/* real cover image — rides the same .cover face (centered above); just fill the
+   box without distorting the 1368×2000 art (crops a sliver top/bottom). */
+img.cover {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* the real (linked) book: signal it's clickable, and show keyboard focus
+   against the moving shelf. Placeholders keep the default cursor. */
+.linked {
+  cursor: pointer;
+}
+.linked:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+  border-radius: 3px;
 }
 
 /* subtle sheen + binding shadow on the cover */

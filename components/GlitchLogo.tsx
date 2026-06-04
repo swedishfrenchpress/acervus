@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import styles from "./Nav.module.css";
 
 // Alpha-Lyrae carries its glitch in OpenType features: calt (subtle, automatic),
@@ -90,14 +91,15 @@ export default function GlitchLogo() {
     (held ? " " + styles.held : "");
 
   return (
-    <a
-      href="#"
+    <Link
+      href="/"
+      aria-label="Acervus — home"
       className={cls}
       style={{ fontFeatureSettings: ff }}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
     >
       Acervus
-    </a>
+    </Link>
   );
 }
