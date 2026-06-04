@@ -9,6 +9,9 @@
   /* Bookshelf tuning knobs (read by bookshelf.module.css) */
   --book-overlap: 118px;
   --book-w: 150px;
+
+  /* Motion — exponential ease-out for entrances; no bounce, no elastic. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 * {

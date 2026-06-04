@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
+import Celestial from "@/components/Celestial";
 import { getBookBySlug } from "@/lib/books";
 import styles from "./page.module.css";
 
@@ -24,11 +25,12 @@ export default async function BookPage({ params }: Params) {
   if (!book?.cover || !book.pdf) notFound();
 
   return (
-    <>
+    <div className={styles.shell}>
+      <Celestial />
       <Nav />
       <main className={styles.page}>
         <Link href="/" className={styles.back}>
-          ← Back to the shelf
+          Back to the shelf
         </Link>
 
       <header className={styles.hero}>
@@ -76,6 +78,6 @@ export default async function BookPage({ params }: Params) {
         </p>
       </section>
       </main>
-    </>
+    </div>
   );
 }

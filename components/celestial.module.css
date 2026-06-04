@@ -1,11 +1,49 @@
-/* very subtle full-page paper grain */
-.noise {
+/* full-page backdrop: the star-chart engraving + paper grain, behind everything */
+.layer {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
   user-select: none;
+  overflow: hidden;
+}
+
+/* The chart sits oversized and off-centre to the upper right, bleeding past the
+   edges so only an arc of it shows — an engraved fragment, not a logo. */
+.chart {
+  position: absolute;
+  top: clamp(-44vmin, -30vmin, -18vmin);
+  right: clamp(-50vmin, -34vmin, -22vmin);
+  width: clamp(620px, 88vmin, 1180px);
+  height: clamp(620px, 88vmin, 1180px);
+  /* ink on paper, faint enough to read as texture */
+  color: var(--fg);
+  opacity: 0.07;
+}
+
+.outer {
+  transform-box: view-box;
+  transform-origin: 500px 500px;
+  animation: spin-cw 280s linear infinite;
+}
+
+.inner {
+  transform-box: view-box;
+  transform-origin: 500px 500px;
+  animation: spin-ccw 200s linear infinite;
+}
+
+/* very subtle full-page paper grain, laid over the chart */
+.noise {
+  position: absolute;
+  inset: 0;
   background-repeat: repeat;
   background-size: 180px 180px;
   opacity: 0.16;
+}
+
+@media (max-width: 760px) {
+  .chart {
+    opacity: 0.05;
+  }
 }

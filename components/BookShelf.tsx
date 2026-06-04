@@ -10,12 +10,12 @@ const SPEED = 0.45; // base marquee px per frame (leftward)
 const RADIUS = 230; // px: horizontal reach of the cursor's influence
 const VRADIUS = 260; // px: vertical reach (the band is tall — fall off above the row)
 const SHARP = 2.4; // gaussian sharpness; higher = tighter, more selective focus
-const PART = 150; // px: how far the row parts around the cursor
+const PART = 200; // px: how far the row parts around the cursor
 const LIFT = 26; // px: the focal book rises
 const POP = 74; // px: the focal book comes toward you (translateZ)
 const TURN = 24; // deg: the focal book turns to face you (net rotateY ~ 0)
 const SCALE = 0.08; // focal book scale bump
-const SLOW = 0.9; // how much peak focus slows the marquee (1 = full stop)
+const SLOW = 1; // how much peak focus slows the marquee (1 = full stop)
 const EASE = 0.16; // per-frame approach to target — the "breathing" smoothness
 
 export default function BookShelf() {
@@ -98,9 +98,12 @@ export default function BookShelf() {
           const uy = (p.y - cy[i]) / VRADIUS;
           // even gaussian in 2D: the book under the cursor peaks at 1
           targetF = Math.exp(-(ux * ux + uy * uy) * SHARP);
-          // odd gaussian-derivative: zero at the cursor, parts books away from it
+          // odd gaussian-derivative: zero at the cursor, parts books away from it.
+          // Damp by (1 - targetF) so the book directly under the cursor — the one
+          // you're aiming at — isn't shoved sideways out from under you; only its
+          // neighbours part to open the gap.
           const odd = -ux * Math.exp(-(ux * ux) * SHARP) * ODD_NORM;
-          targetPush = Math.max(-1, Math.min(1, odd)) * PART;
+          targetPush = Math.max(-1, Math.min(1, odd)) * PART * (1 - targetF);
         }
         f[i] = lerp(f[i] ?? 0, targetF, EASE);
         pr[i] = lerp(pr[i] ?? 0, targetPush, EASE);

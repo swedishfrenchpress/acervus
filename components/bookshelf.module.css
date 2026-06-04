@@ -1,19 +1,21 @@
 .shelf {
   position: relative;
-  /* in-flow now (centred with the hero by .composition); flex must not collapse
-     its height, since the 3D children are absolutely positioned */
+  /* Stacked in the same grid cell as the masthead (.composition) and pinned to
+     the bottom of the stage; the oversized type sits in front (higher z). */
+  align-self: end;
   flex: 0 0 auto;
   width: 100%;
-  height: clamp(340px, 46vh, 560px);
-  z-index: 3;
+  height: clamp(340px, 50vh, 600px);
+  z-index: 1;
   overflow: hidden; /* clip the looping track at the viewport edges */
+  animation: shelfRise 1.1s var(--ease-out-expo) 0.5s both;
 
   /* ---- tuning knobs ---- */
   --persp: 2000px;
   --tilt-x: 3deg; /* look very slightly down on the shelf */
   --tilt-ry: 20deg; /* plane recede: left near/large, right far/small */
   --tilt-z: -2deg; /* diagonal: row rises gently toward the right */
-  --shelf-scale: 1.1;
+  --shelf-scale: 1.16;
   --tilt-bottom: clamp(64px, 9vh, 220px); /* lift the row so full covers clear the bottom */
   --book-ry: -44deg; /* counter-rotate so covers stay face-on (net ~-24) */
   --book-w: 172px;
@@ -154,6 +156,17 @@ img.cover {
   transform: translate(-50%, -50%) rotateX(90deg)
     translateZ(calc(var(--h) / 2));
   background: linear-gradient(#efe9da, #d4ccb6);
+}
+
+@keyframes shelfRise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* keep the shelf a tidy bottom band on small screens */

@@ -7,19 +7,38 @@
   overflow: hidden;
   isolation: isolate;
   background:
-    radial-gradient(120% 90% at 50% -8%, var(--bg-tint) 0%, var(--bg) 58%),
+    radial-gradient(125% 92% at 72% -6%, var(--bg-tint) 0%, var(--bg) 56%),
     var(--bg);
 }
 
-/* Hero copy + shelf travel together as one block, vertically centred in the
-   space under the nav with a fixed gap — so on tall windows the books stay
-   beside the copy instead of drifting to the bottom edge. */
+/* The masthead and the shelf share one grid cell and overlap: the oversized
+   type (z-index 2) crosses in front of the full-bleed shelf band (z-index 1),
+   which is pinned to the bottom of the stage. */
 .composition {
   flex: 1 1 auto;
   min-height: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: clamp(24px, 5vh, 72px);
   position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.composition > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+/* Below the masthead-over-shelf breakpoint, stop overlapping: stack the
+   masthead above the shelf and let the page grow/scroll naturally. */
+@media (max-width: 860px) {
+  .page {
+    overflow-x: hidden;
+  }
+  .composition {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: clamp(20px, 4vh, 56px);
+    padding-bottom: clamp(16px, 4vh, 48px);
+  }
 }
