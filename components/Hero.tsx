@@ -14,22 +14,18 @@ export default function Hero() {
           <span className={styles.dot} aria-hidden />
           Browse the collection
         </a>
-        <a
-          href="https://annas-archive.org"
-          target="_blank"
-          rel="noreferrer"
-          className={styles.secondary}
-        >
-          Anna&rsquo;s Archive &#8599;
-        </a>
       </div>
       <p className={styles.footnote}>
         Public domain only here &mdash; nothing to take down. For everything
         else, there&rsquo;s{" "}
+        <a href="https://annas-archive.gl/" target="_blank" rel="noreferrer">
+          Anna&rsquo;s Archive
+        </a>
+        ,{" "}
         <a href="https://libgen.is" target="_blank" rel="noreferrer">
           LibGen
-        </a>{" "}
-        and the torrents.
+        </a>
+        , and the torrents.
       </p>
     </section>
   );

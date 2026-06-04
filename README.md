@@ -8,7 +8,7 @@ features an infinite 3D book carousel that auto-scrolls and reacts to hover
 light "paper" background.
 
 Everything in the collection is public domain — nothing to take down. For
-everything else, there's [Anna's Archive](https://annas-archive.org),
+everything else, there's [Anna's Archive](https://annas-archive.gl/),
 [LibGen](https://libgen.is), and the torrents.
 
 ## Stack
