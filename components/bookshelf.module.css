@@ -1,0 +1,178 @@
+.shelf {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: clamp(380px, 60vh, 760px);
+  z-index: 3;
+  overflow: hidden; /* clip the looping track at the viewport edges */
+
+  /* ---- tuning knobs ---- */
+  --persp: 2000px;
+  --tilt-x: 3deg; /* look very slightly down on the shelf */
+  --tilt-ry: 20deg; /* plane recede: left near/large, right far/small */
+  --tilt-z: -2deg; /* diagonal: row rises gently toward the right */
+  --shelf-scale: 1.1;
+  --tilt-bottom: clamp(64px, 9vh, 220px); /* lift the row so full covers clear the bottom */
+  --book-ry: -44deg; /* counter-rotate so covers stay face-on (net ~-24) */
+  --book-w: 172px;
+  --book-overlap: 74px;
+}
+
+/* soft contact shadow / grounding at the base */
+.floor {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 42%;
+  background: radial-gradient(
+    120% 100% at 42% 100%,
+    rgba(40, 36, 18, 0.16) 0%,
+    rgba(40, 36, 18, 0) 60%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+.stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  perspective: var(--persp);
+  perspective-origin: 50% 74%;
+}
+
+.tilt {
+  position: absolute;
+  left: 50%;
+  bottom: var(--tilt-bottom);
+  transform-style: preserve-3d;
+  transform: translateX(-50%) scale(var(--shelf-scale)) rotateX(var(--tilt-x))
+    rotateY(var(--tilt-ry)) rotateZ(var(--tilt-z));
+  transform-origin: bottom center;
+}
+
+.track {
+  display: flex;
+  align-items: flex-end;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ---- a single 3D book ---- */
+.book {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--book-w);
+  height: var(--h);
+  margin-left: calc(-1 * var(--book-overlap));
+  transform-style: preserve-3d;
+  transform: translateX(var(--push, 0px)) rotateY(var(--book-ry));
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.book:first-child {
+  margin-left: 0;
+}
+
+.book > span {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+}
+
+/* front cover (plain colour placeholder — swap for <img> later) */
+.cover {
+  width: var(--book-w);
+  height: var(--h);
+  transform: translate(-50%, -50%) translateZ(calc(var(--t) / 2));
+  background: var(--cover);
+  border-radius: 2px 5px 5px 2px;
+  box-shadow:
+    inset 7px 0 16px rgba(0, 0, 0, 0.28),
+    inset -3px 0 8px rgba(255, 255, 255, 0.08),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.14),
+    0 20px 30px rgba(40, 36, 18, 0.26);
+  overflow: hidden;
+}
+
+/* subtle sheen + binding shadow on the cover */
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 26%,
+      rgba(0, 0, 0, 0.12) 100%
+    ),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 6px, transparent 6px);
+}
+
+/* right fore-edge (the white page block) */
+.pages {
+  width: var(--t);
+  height: calc(var(--h) - 6px);
+  transform: translate(-50%, -50%) rotateY(90deg)
+    translateZ(calc(var(--book-w) / 2));
+  background:
+    linear-gradient(rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0) 12%),
+    repeating-linear-gradient(
+      to right,
+      #efe9da 0,
+      #efe9da 1px,
+      #cfc6b0 1px,
+      #cfc6b0 2.2px
+    );
+  border-radius: 0 2px 2px 0;
+}
+
+/* top edge */
+.topface {
+  width: var(--book-w);
+  height: var(--t);
+  transform: translate(-50%, -50%) rotateX(90deg)
+    translateZ(calc(var(--h) / 2));
+  background: linear-gradient(#efe9da, #d4ccb6);
+}
+
+/* ---- hover: lift, face the viewer, sit forward ---- */
+.book[data-hover="true"] {
+  transform: translateX(var(--push, 0px)) translateY(-30px) translateZ(80px)
+    rotateY(calc(-1 * var(--tilt-ry))) scale(1.07);
+  z-index: 5;
+}
+
+.book[data-hover="true"] .cover {
+  box-shadow:
+    inset 7px 0 16px rgba(0, 0, 0, 0.2),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.14),
+    0 34px 50px rgba(40, 36, 18, 0.34);
+}
+
+/* keep the shelf a tidy bottom band on small screens */
+@media (max-width: 760px) {
+  .shelf {
+    height: clamp(300px, 48vh, 440px);
+    --shelf-scale: 0.82;
+    --tilt-bottom: clamp(48px, 7vh, 120px);
+    --book-w: 134px;
+    --book-overlap: 58px;
+  }
+}
+
+@media (max-width: 460px) {
+  .shelf {
+    --shelf-scale: 0.66;
+    --tilt-bottom: clamp(40px, 6vh, 96px);
+    --book-w: 118px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book {
+    transition: none;
+  }
+}

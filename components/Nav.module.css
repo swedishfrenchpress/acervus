@@ -1,0 +1,35 @@
+.nav {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 22px clamp(20px, 4vw, 56px);
+}
+
+.logo {
+  font-family: var(--font-serif), serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: 0.2px;
+  color: var(--fg);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.link {
+  font-size: 14px;
+  color: var(--fg);
+  opacity: 0.78;
+  transition: opacity 0.18s ease;
+}
+
+.link:hover {
+  opacity: 1;
+}
