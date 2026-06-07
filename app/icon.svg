@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="The Cypherpunk Library">
+  <defs>
+    <!-- The CTA "ink plate" gradient from globals.css, top-lit. -->
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2a2818"/>
+      <stop offset=".52" stop-color="#1c1b12"/>
+      <stop offset="1" stop-color="#14130c"/>
+    </linearGradient>
+    <!-- Thin horizontal bands the "C" is displaced within, for the glitch. -->
+    <clipPath id="tearA"><rect x="0" y="27.4" width="64" height="3"/></clipPath>
+    <clipPath id="tearB"><rect x="0" y="35.8" width="64" height="2.3"/></clipPath>
+  </defs>
+
+  <!-- Ink plate -->
+  <rect width="64" height="64" rx="14" fill="url(#plate)"/>
+  <!-- Faint top hairline for a touch of depth -->
+  <rect x=".75" y=".75" width="62.5" height="62.5" rx="13.25"
+        fill="none" stroke="#ffffe1" stroke-opacity=".08"/>
+
+  <!-- The "C": a bold paper-colored arc, opening to the right. -->
+  <path d="M 44.63 43.37 A 17 17 0 1 1 44.63 20.63"
+        fill="none" stroke="#ffffe1" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Glitch tear A — the C's left limb slipped right within this band. The
+       inset flat fill repaints just the limb's strip of plate so the displaced
+       copy reads as a clean break; across 3px the gradient barely shifts, so
+       the seam stays invisible, and the band never touches the plate edge. -->
+  <g clip-path="url(#tearA)">
+    <rect x="6" y="0" width="24" height="64" fill="#1e1d13"/>
+    <path d="M 44.63 43.37 A 17 17 0 1 1 44.63 20.63" transform="translate(2.6 0)"
+          fill="none" stroke="#ffffe1" stroke-width="9" stroke-linecap="round"/>
+  </g>
+  <!-- Glitch tear B — a thinner slice slipped the other way. -->
+  <g clip-path="url(#tearB)">
+    <rect x="6" y="0" width="24" height="64" fill="#1b1a11"/>
+    <path d="M 44.63 43.37 A 17 17 0 1 1 44.63 20.63" transform="translate(-2 0)"
+          fill="none" stroke="#ffffe1" stroke-width="9" stroke-linecap="round"/>
+  </g>
+</svg>

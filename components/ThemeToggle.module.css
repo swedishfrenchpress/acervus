@@ -21,6 +21,14 @@
   outline-offset: 2px;
 }
 
+/* Touch: grow the hit area to the 44px comfortable minimum (the icon stays put). */
+@media (pointer: coarse) {
+  .toggle {
+    width: 44px;
+    height: 44px;
+  }
+}
+
 .icon {
   width: 18px;
   height: 18px;

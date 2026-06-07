@@ -11,9 +11,9 @@
     var(--bg);
 }
 
-/* The masthead and the shelf share one grid cell and overlap: the oversized
-   type (z-index 2) crosses in front of the full-bleed shelf band (z-index 1),
-   which is pinned to the bottom of the stage. */
+/* The hero and the shelf share one grid cell and overlap: the oversized type
+   (z-index 2) crosses in front of the full-bleed shelf band (z-index 1), which is
+   pinned to the bottom of the stage. */
 .composition {
   flex: 1 1 auto;
   min-height: 0;
@@ -28,8 +28,11 @@
   min-width: 0;
 }
 
-/* Below the masthead-over-shelf breakpoint, stop overlapping: stack the
-   masthead above the shelf and let the page grow/scroll naturally. */
+/* Below the masthead-over-shelf breakpoint, stop overlapping: the hero dissolves
+   to display:contents (Hero.module.css) so its masthead and intro join this flex
+   column alongside the shelf, and `order` lays them out title (1) → shelf (2) →
+   intro (3). That puts the signature shelf in the first screen with the framing
+   copy following it. The title↔shelf gap stays tight so both clear the fold. */
 @media (max-width: 860px) {
   .page {
     overflow-x: hidden;
@@ -37,8 +40,12 @@
   .composition {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    gap: clamp(20px, 4vh, 56px);
-    padding-bottom: clamp(16px, 4vh, 48px);
+    align-items: stretch;
+    gap: clamp(16px, 2.4vh, 28px);
+    padding-bottom: clamp(28px, 6vh, 64px);
+  }
+  /* the shelf is the second DOM child (after the hero wrapper) */
+  .composition > *:nth-child(2) {
+    order: 2;
   }
 }

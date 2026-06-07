@@ -70,3 +70,10 @@
   align-items: center;
   gap: 28px;
 }
+
+/* Mobile: trim the masthead's top room so the shelf clears the fold sooner. */
+@media (max-width: 860px) {
+  .nav {
+    padding: 16px clamp(20px, 6vw, 30px);
+  }
+}

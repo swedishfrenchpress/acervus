@@ -9,6 +9,9 @@ export default function Home() {
     <main className={styles.page}>
       <Celestial />
       <Nav />
+      {/* Hero (masthead + intro) and the shelf overlap in one cell on desktop;
+          on mobile the hero dissolves to display:contents and `order` stacks them
+          title → shelf → intro, so the signature shelf lands in the first screen. */}
       <div className={styles.composition}>
         <Hero />
         <BookShelf />

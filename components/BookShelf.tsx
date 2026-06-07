@@ -120,7 +120,15 @@ export default function BookShelf() {
     };
   }, []);
 
+  // Pointer in / out. onDown is what makes the rise work on touch: a finger has
+  // no hover, so we seed the pointer on press — the book under the thumb lifts
+  // and the marquee eases to a near-stop, the same headline move as a desktop
+  // hover. A lifted tap still fires the link; up / cancel (a release, or the
+  // gesture turning into a page scroll) hands the marquee back.
   const onMove = (e: React.PointerEvent) => {
+    pointer.current = { x: e.clientX, y: e.clientY };
+  };
+  const onDown = (e: React.PointerEvent) => {
     pointer.current = { x: e.clientX, y: e.clientY };
   };
   const onLeave = () => {
@@ -131,6 +139,9 @@ export default function BookShelf() {
     <div
       className={styles.shelf}
       onPointerMove={onMove}
+      onPointerDown={onDown}
+      onPointerUp={onLeave}
+      onPointerCancel={onLeave}
       onPointerLeave={onLeave}
     >
       <div className={styles.stage}>

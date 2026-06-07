@@ -171,13 +171,14 @@ books[BLANKENSHIP] = {
   year: 1986,
 };
 
-const CYPHERNOMICON = 13; // wine — link-out
+const CYPHERNOMICON = 13; // wine — link-out, with its own cover
 books[CYPHERNOMICON] = {
   ...books[CYPHERNOMICON],
   slug: "the-cyphernomicon",
   title: "The Cyphernomicon",
   author: "Timothy C. May",
   series: "A Cypherpunk's Library",
+  cover: "/covers/the-cyphernomicon.png",
   external: "https://nakamotoinstitute.org/library/cyphernomicon/",
   externalLabel: "Nakamoto Institute",
   description:
@@ -219,6 +220,30 @@ books[ZIMMERMANN] = {
     "automated surveillance, the ability to encrypt is a precondition of a free " +
     "society — privacy must be the default, not a favour granted by the powerful.",
   year: 1991,
+};
+
+// --- a contemporary addition ---
+// Max Hildebrand's 2026 treatise — a PDF book with its own cover, read inline
+// (cover + pdf, like Finney). Overlaid onto the charcoal slot (index 6): the
+// dark blue-grey reads as a sympathetic fallback behind the navy poster art.
+const HILDEBRAND = 6; // charcoal
+books[HILDEBRAND] = {
+  ...books[HILDEBRAND],
+  slug: "the-praxeology-of-privacy",
+  title: "The Praxeology of Privacy",
+  author: "Max Hildebrand",
+  series: "A Cypherpunk's Library",
+  cover: "/covers/the-praxeology-of-privacy.png",
+  pdf: "/books/the-praxeology-of-privacy.pdf",
+  description:
+    "Max Hildebrand's synthesis of two traditions that reach the same end from " +
+    "opposite starts — Austrian economics, which deduces from the fact of human " +
+    "action that observation is the precondition of state predation, and the " +
+    "cypherpunks, who wrote the running code that proves these systems can be " +
+    "defended. A treatise on why privacy matters, and a working field guide to " +
+    "the engineering that makes it survivable.",
+  year: 2026,
+  pages: 587,
 };
 
 /** Look up a book by its URL slug (undefined for placeholders / unknown slugs). */

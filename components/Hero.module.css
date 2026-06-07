@@ -1,8 +1,11 @@
-/* Editorial masthead. Lives in the same grid cell as the shelf (set in
-   page.module.css) and sits in front of it, so the oversized type crosses the
-   shelf band. The section itself ignores the pointer so the proximity shelf
-   behind it still feels the cursor through the type; only the real links opt
-   back in. */
+/* Hero area — the editorial masthead (the <h1>) and the supporting intro
+   (subtitle, CTA, footnote), wrapped in .hero. On desktop the .hero grid places
+   the wordmark top-left and the intro bottom-right, both in front of the shelf
+   (z-index 2) and ignoring the pointer so the proximity shelf behind still feels
+   the cursor through the type; only the real links opt back in. On mobile the
+   wrapper dissolves to display:contents so the masthead, shelf and intro share one
+   flex column (set in page.module.css) and `order` interleaves them — title,
+   shelf, intro — bringing the signature shelf into the first screen. */
 .hero {
   position: relative;
   z-index: 2;
@@ -165,27 +168,41 @@
   }
 }
 
-/* On short / narrow viewports, collapse to a single left column and let the
-   page scroll rather than cramming the masthead over the shelf. */
+/* ---- mobile: one column, shelf in the fold. The wrapper dissolves so the
+   masthead and intro become flex items of .composition alongside the shelf, and
+   `order` lays them out title → shelf (order 2, set in page.module.css) → intro.
+   The title gets a contained, still-bold size; the intro drops below the shelf,
+   flush-left and full-measure. ---- */
 @media (max-width: 860px) {
   .hero {
-    grid-template-columns: minmax(0, 1fr);
-    /* stack and let rows size to content — no stretched row, so the aside
-       follows the title in normal flow instead of dropping to the bottom. */
-    grid-template-rows: auto;
-    grid-template-areas:
-      "title"
-      "aside";
+    display: contents;
+  }
+  .title {
+    order: 1;
+    align-self: stretch;
+    padding: clamp(8px, 2vh, 18px) clamp(20px, 6vw, 30px) 0;
+    font-size: clamp(2.4rem, 13vw, 4.5rem);
+    letter-spacing: -0.03em;
   }
   .aside {
-    align-self: start;
+    order: 3;
+    align-self: stretch;
     justify-self: start;
-    text-align: left;
-    max-width: min(46ch, 100%);
-    margin-top: clamp(18px, 3vh, 32px);
-    margin-bottom: 0;
+    pointer-events: auto;
+    max-width: min(48ch, 100%);
+    margin: 0;
+    padding: 0 clamp(20px, 6vw, 30px);
   }
-  .actions {
-    justify-content: flex-start;
+  .footnote {
+    font-size: 13.5px;
+  }
+}
+
+/* ---- short viewports (landscape phones): cap the masthead by height so the
+   wordmark can't swallow the screen, and tuck it tight to the top. ---- */
+@media (max-width: 860px) and (max-height: 540px) {
+  .title {
+    padding-top: clamp(4px, 1.5vh, 10px);
+    font-size: clamp(1.7rem, 7vh, 2.7rem);
   }
 }
