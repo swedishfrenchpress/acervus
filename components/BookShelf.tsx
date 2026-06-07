@@ -36,9 +36,10 @@ export default function BookShelf() {
   const capAuthorRef = useRef<HTMLSpanElement>(null);
   const shownKey = useRef(-1);
 
-  // Render the set three times so the track always overflows the viewport and
-  // there is room to loop seamlessly.
-  const rendered = [...books, ...books, ...books];
+  // Render the set several times so the track always overflows the viewport and
+  // loops seamlessly. The measure below keys off one set width (books.length), so
+  // any repeat count ≥ 2 works; four keeps a comfortable margin on wide screens.
+  const rendered = Array.from({ length: 4 }, () => books).flat();
 
   useEffect(() => {
     const track = trackRef.current;
@@ -183,45 +184,16 @@ export default function BookShelf() {
               const setRef = (el: HTMLElement | null) => {
                 if (el) bookEls.current[i] = el;
               };
-              // A real cover gets the poster's exact proportions so its art
-              // fills the face edge-to-edge with nothing cropped: height is
-              // derived from --book-w (so it holds at every breakpoint), biased
-              // a hair taller than the ~1364×2000 art so any sub-pixel trim
-              // lands on the side margins, never the title/author. Placeholders
-              // keep their varied, mismatched heights.
+              // Varied, mismatched heights so the row reads as real books.
               const style = {
                 "--cover": b.color,
-                "--h": b.cover ? `calc(var(--book-w) * 1.47)` : `${b.h}px`,
+                "--h": `${b.h}px`,
                 "--t": `${b.t}px`,
               } as React.CSSProperties;
-              const faces = (
-                <>
-                  {b.cover ? (
-                    // Decorative — the <a>'s aria-label carries the name. Rides the
-                    // same .cover 3D face (sheen, shadow, brightness) as placeholders.
-                    <img
-                      className={styles.cover}
-                      src={b.cover}
-                      alt=""
-                      aria-hidden
-                      draggable={false}
-                    />
-                  ) : b.slug && b.title ? (
-                    // Real book, art pending: set the title on the cover face so the
-                    // spine reads as an intentional typographic cover until art lands.
-                    <span className={`${styles.cover} ${styles.spine}`}>
-                      <span className={styles.spineTitle}>{b.title}</span>
-                    </span>
-                  ) : (
-                    <span className={styles.cover} />
-                  )}
-                  <span className={styles.pages} />
-                  <span className={styles.topface} />
-                </>
-              );
 
-              // A `slug` makes the book real: a focusable, clickable link.
-              return b.slug ? (
+              // Every book is a focusable, clickable link to its page, with the
+              // title set as a typographic cover on the spine face.
+              return (
                 <Link
                   key={i}
                   ref={setRef}
@@ -232,19 +204,12 @@ export default function BookShelf() {
                   aria-label={`${b.title} by ${b.author}`}
                   draggable={false}
                 >
-                  {faces}
+                  <span className={`${styles.cover} ${styles.spine}`}>
+                    <span className={styles.spineTitle}>{b.title}</span>
+                  </span>
+                  <span className={styles.pages} />
+                  <span className={styles.topface} />
                 </Link>
-              ) : (
-                <div
-                  key={i}
-                  ref={setRef}
-                  className={styles.book}
-                  style={style}
-                  data-book-index={i}
-                  aria-hidden
-                >
-                  {faces}
-                </div>
               );
             })}
           </div>

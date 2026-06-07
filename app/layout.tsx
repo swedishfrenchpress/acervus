@@ -33,6 +33,7 @@ export const metadata: Metadata = {
     template: "%s · The Cypherpunk Library",
   },
   description: DESCRIPTION,
+  alternates: { canonical: "/" },
   openGraph: {
     title: "The Cypherpunk Library",
     description: DESCRIPTION,
@@ -53,9 +54,12 @@ export const metadata: Metadata = {
 // beforeInteractive defers to the Next runtime (after parse) in the App Router,
 // so a plain inline <script> is the FOUC-free path. It reads a saved choice,
 // else the OS preference, and writes [data-theme] (+ color-scheme) that the
-// tokens in globals.css key off. suppressHydrationWarning silences the expected
-// diff between the server's bare <html> and the script-mutated one.
-const THEME_INIT = `(function(){try{var e=document.documentElement,s=localStorage.getItem('theme'),t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');e.setAttribute('data-theme',t);e.style.colorScheme=t;}catch(_){}})();`;
+// tokens in globals.css key off. It also seeds <meta name="theme-color"> so the
+// mobile browser chrome matches the paper (--bg) from the first frame and tracks
+// the real theme, including a manual override — ThemeToggle keeps it in sync.
+// suppressHydrationWarning silences the expected diff between the server's bare
+// <html> and the script-mutated one.
+const THEME_INIT = `(function(){try{var e=document.documentElement,s=localStorage.getItem('theme'),t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');e.setAttribute('data-theme',t);e.style.colorScheme=t;var m=document.querySelector('meta[name="theme-color"]');if(!m){m=document.createElement('meta');m.setAttribute('name','theme-color');document.head.appendChild(m);}m.setAttribute('content',t==='dark'?'#14130c':'#ffffe1');}catch(_){}})();`;
 
 export default function RootLayout({
   children,

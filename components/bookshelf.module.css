@@ -70,18 +70,16 @@
   margin-left: 0;
 }
 
-/* Every face — the placeholder spans AND the real cover <img> — is centered in
-   the book box, then pushed to its plane by its own transform. The <img> must be
-   included here or it falls into normal flow and detaches from pages/top-face. */
-.book > span,
-.book > img {
+/* Every face is centered in the book box, then pushed to its plane by its own
+   transform. */
+.book > span {
   position: absolute;
   top: 50%;
   left: 50%;
   display: block;
 }
 
-/* front cover (plain colour placeholder — swap for <img> later) */
+/* front cover face — the title sits on this solid plate colour */
 .cover {
   width: var(--book-w);
   height: var(--h);
@@ -101,18 +99,9 @@
   overflow: hidden;
 }
 
-/* real cover image — rides the same .cover face (centered above). The face is
-   sized to the art's ~1364×2000 aspect (see --h in BookShelf.tsx), so cover
-   fills it edge-to-edge with no meaningful crop. */
-img.cover {
-  object-fit: cover;
-  object-position: center;
-}
-
-/* real book, art pending: the title set as a typographic cover. Rides the same
-   .cover face (so it keeps the 3D plane, sheen ::after and elevation shadow);
-   .spine only centers the vertical title inside it. Plain placeholders and real
-   img.covers are untouched. */
+/* the title set as a typographic cover. Rides the same .cover face (so it keeps
+   the 3D plane, sheen ::after and elevation shadow); .spine only centers the
+   vertical title inside it. */
 /* `.book > .spine` (0,2,0) must out-specify the earlier `.book > span` (0,1,1)
    rule that sets display:block, or this never becomes a flex container. */
 .book > .spine {

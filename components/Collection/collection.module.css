@@ -305,7 +305,7 @@
     0 14px 30px rgba(40, 36, 18, 0.2);
   transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease;
 }
-/* shared binding shadow + sheen, painted over art and plates alike */
+/* binding shadow + sheen, painted over the plate */
 .cover::after {
   content: "";
   position: absolute;
@@ -321,9 +321,6 @@
       rgba(255, 255, 255, 0) 30%,
       rgba(0, 0, 0, 0.1) 100%
     );
-}
-.coverImg {
-  object-fit: cover;
 }
 .coverCard {
   width: 100%;

@@ -162,7 +162,7 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
 
       <p className={styles.count} aria-live="polite">
         {results.length} {results.length === 1 ? "book" : "books"}
-        {filtered && (
+        {filtered && results.length > 0 && (
           <>
             {" · "}
             <button type="button" className={styles.clear} onClick={clearAll}>

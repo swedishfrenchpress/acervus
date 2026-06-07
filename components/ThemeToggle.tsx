@@ -14,6 +14,11 @@ export default function ThemeToggle() {
     const next = el.getAttribute("data-theme") === "dark" ? "light" : "dark";
     el.setAttribute("data-theme", next);
     el.style.colorScheme = next;
+    // Keep the browser-chrome colour on the live theme (the meta is seeded by the
+    // init script in layout.tsx). Values mirror --bg in globals.css.
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", next === "dark" ? "#14130c" : "#ffffe1");
     try {
       localStorage.setItem("theme", next);
     } catch {

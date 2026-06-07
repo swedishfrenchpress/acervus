@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Nav from "@/components/Nav";
 import Celestial from "@/components/Celestial";
 import { getBookBySlug } from "@/lib/books";
+import { OG_IMAGE, TWITTER_IMAGE } from "@/lib/og";
 import { texts } from "@/content/texts";
 import styles from "./page.module.css";
 
@@ -14,9 +14,34 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const book = getBookBySlug(slug);
   if (!book?.title) return { title: "Not found" };
+
+  // Child pages don't inherit the root openGraph field by field: defining our own
+  // replaces it wholesale (Next merges metadata shallowly), which also drops the
+  // inherited file-based card image — so we re-attach OG_IMAGE/TWITTER_IMAGE here.
+  // Without this, a shared book link would show the generic site title and no art.
+  // og:title gets the full name spelled out, since the title template only touches
+  // <title>, not openGraph.
+  const url = `/book/${slug}`;
+  const ogTitle = `${book.title} · The Cypherpunk Library`;
   return {
     title: book.title,
     description: book.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: ogTitle,
+      description: book.description,
+      url,
+      type: "article",
+      siteName: "The Cypherpunk Library",
+      authors: book.author ? [book.author] : undefined,
+      images: [OG_IMAGE],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: ogTitle,
+      description: book.description,
+      images: [TWITTER_IMAGE],
+    },
   };
 }
 
@@ -46,28 +71,16 @@ export default async function BookPage({ params }: Params) {
         </Link>
 
         <header className={styles.hero}>
-          {book.cover ? (
-            <div className={styles.cover}>
-              <Image
-                className={styles.coverImg}
-                src={book.cover}
-                alt=""
-                fill
-                sizes="(max-width: 760px) 240px, 300px"
-                priority
-              />
-            </div>
-          ) : (
-            // Cover art lands later; until then a typographic plate echoes the
-            // shelf spine and keeps the hero's "book on the page" proportions.
-            <div
-              className={styles.plate}
-              style={{ background: book.color }}
-              aria-hidden
-            >
-              <span className={styles.plateTitle}>{book.title}</span>
-            </div>
-          )}
+          {/* The typographic plate is the cover: the title set in the display
+              face on the book's plate colour, echoing the shelf spine and keeping
+              the hero's "book on the page" proportions. */}
+          <div
+            className={styles.plate}
+            style={{ background: book.color }}
+            aria-hidden
+          >
+            <span className={styles.plateTitle}>{book.title}</span>
+          </div>
 
           <div className={styles.meta}>
             {book.series && <p className={styles.series}>{book.series}</p>}

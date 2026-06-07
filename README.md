@@ -3,9 +3,9 @@
 > One cypherpunk's library — a personal collection of good public-domain reads.
 
 A small landing page for a curated, public-domain book collection. The hero
-features an infinite 3D book carousel that auto-scrolls and reacts to hover
-(neighbouring books fan apart, the hovered book lifts and faces you), over a
-light "paper" background.
+features an infinite 3D book carousel that auto-scrolls and reacts to the cursor
+(the book under the cursor lifts off the row as the marquee eases to a near-stop
+and names itself beneath the shelf), over a light "paper" background.
 
 Everything in the collection is public domain — nothing to take down. For
 everything else, there's [Anna's Archive](https://annas-archive.gl/),
@@ -24,19 +24,26 @@ npm run dev      # http://localhost:3000
 npm run build    # production build
 ```
 
-## Adding real books
+## Adding books
 
-Book covers are currently plain colored placeholders. They live as a data
-array in [`lib/books.ts`](lib/books.ts):
+The collection is a data array in [`lib/books.ts`](lib/books.ts). Every book is
+shown as a typographic cover — its title set in the display face on a solid plate
+colour — so there are no cover images to manage. A new entry looks like:
 
 ```ts
-{ id, color, h, t }   // color = placeholder cover, h = height, t = thickness
+{
+  slug, title, author,   // identity; slug → /book/[slug]
+  color, h,              // plate colour (keep it dark — the title sits on it in light type) + shelf height in px
+  description, year,     // shown on the book page
+  // …plus ONE reading mode, in priority order:
+  pdf,                   // a PDF under /public/books (reads inline / opens in a tab), or
+  external,              // a URL to the full work elsewhere (a link-out), or
+  source,                // the URL a reproduced text came from (its prose lives in content/texts, keyed by slug)
+}
 ```
 
-To use real cover images, add a `cover` image path to each entry and swap the
-colored `.cover` `<span>` for an `<img>` in
-[`components/BookShelf.tsx`](components/BookShelf.tsx). The 3D box is already
-sized and clipped, so it's a drop-in.
+The shared `series` label and the spine thickness `t` are folded in for every
+book, so you don't set them per entry.
 
 ## Tuning the carousel
 
@@ -55,5 +62,5 @@ The look of the 3D shelf is driven by CSS variables at the top of
 | `--book-w`        | cover width                               |
 | `--book-overlap`  | spacing between books                     |
 
-The marquee speed and hover-spread (`PUSH_PX`, `FALLOFF`, `REACH`) live at the
-top of [`components/BookShelf.tsx`](components/BookShelf.tsx).
+The marquee speed and focus response (`SPEED`, `LIFT`, `POP`, `SCALE`) live at
+the top of [`components/BookShelf.tsx`](components/BookShelf.tsx).

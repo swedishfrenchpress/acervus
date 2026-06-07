@@ -3,19 +3,38 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import Celestial from "@/components/Celestial";
 import CollectionBrowser from "@/components/Collection/CollectionBrowser";
+import { OG_IMAGE, TWITTER_IMAGE } from "@/lib/og";
 import { books } from "@/lib/books";
 import { texts } from "@/content/texts";
 import styles from "./page.module.css";
 
+const DESCRIPTION =
+  "Search and browse the full Cypherpunk Library: every manifesto, essay, and treatise on the shelf, by format.";
+
 export const metadata: Metadata = {
   title: "Browse the collection",
-  description:
-    "Search and browse the full Cypherpunk Library: every manifesto, essay, and treatise on the shelf, by format.",
+  description: DESCRIPTION,
+  alternates: { canonical: "/collection" },
+  // Defining openGraph here replaces the root's (shallow merge), so a shared
+  // /collection link reads as the browse page, not the generic landing. That
+  // replacement also drops the inherited file-based card image, so re-attach it.
+  openGraph: {
+    title: "Browse the collection · The Cypherpunk Library",
+    description: DESCRIPTION,
+    url: "/collection",
+    type: "website",
+    siteName: "The Cypherpunk Library",
+    images: [OG_IMAGE],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Browse the collection · The Cypherpunk Library",
+    description: DESCRIPTION,
+    images: [TWITTER_IMAGE],
+  },
 };
 
 export default function CollectionPage() {
-  // Only real books (a slug + title) browse; the palette placeholders don't.
-  const realBooks = books.filter((b) => b.slug && b.title);
   // Just the slugs cross to the client — the prose components stay server-side.
   const textSlugs = Object.keys(texts);
 
@@ -36,7 +55,7 @@ export default function CollectionPage() {
           </p>
         </header>
 
-        <CollectionBrowser books={realBooks} textSlugs={textSlugs} />
+        <CollectionBrowser books={books} textSlugs={textSlugs} />
       </main>
     </div>
   );
