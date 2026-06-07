@@ -8,8 +8,8 @@ export default function Intro() {
   return (
     <div className={styles.aside}>
       <p className={styles.subtitle}>
-        A personal collection of good public-domain reads, curated by some random
-        cypherpunk. Nothing for sale, nothing to take down.
+        A personal collection of good public-domain reads. Nothing for sale,
+        nothing to take down.
       </p>
       <div className={styles.actions}>
         <Link href="/collection" className={styles.primary}>

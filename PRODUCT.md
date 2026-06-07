@@ -10,7 +10,7 @@ Privacy-minded readers: the cypherpunk crowd who care about free information, en
 
 ## Product Purpose
 
-Acervus is one cypherpunk's library: a curated collection of good public-domain reads. The landing page exists to make a small, opinionated collection feel inviting and alive, and to make a quiet point: everything here is public domain, so there is nothing for anyone to take down. Success is a visitor who lingers on the shelf, feels the care in the curation, and clicks through to read. The signature element is an infinite 3D book carousel over a light "paper" surface.
+Acervus is a cypherpunk's library: a curated collection of good public-domain reads. The landing page exists to make a small, opinionated collection feel inviting and alive, and to make a quiet point: everything here is public domain, so there is nothing for anyone to take down. Success is a visitor who lingers on the shelf, feels the care in the curation, and clicks through to read. The signature element is an infinite 3D book carousel over a light "paper" surface.
 
 ## Brand Personality
 

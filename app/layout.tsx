@@ -20,7 +20,7 @@ const alphaLyrae = localFont({
 });
 
 const DESCRIPTION =
-  "A personal collection of good public-domain reads, curated by some random cypherpunk. Free to read, free to keep.";
+  "A personal collection of good public-domain reads. Free to read, free to keep.";
 
 // metadataBase resolves the file-based opengraph-image / twitter-image (app/)
 // to absolute https://www.cypherpunkbooks.com URLs so crawlers index them. The

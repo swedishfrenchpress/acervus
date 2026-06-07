@@ -7,7 +7,7 @@ import styles from "./Hero.module.css";
 export default function Masthead() {
   return (
     <h1 className={styles.title}>
-      <span className={styles.line}>One</span>
+      <span className={styles.line}>A</span>
       <span className={styles.line}>cypherpunk&rsquo;s</span>
       <span className={styles.line}>library</span>
     </h1>

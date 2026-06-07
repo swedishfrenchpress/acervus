@@ -1,6 +1,6 @@
 # Acervus
 
-> One cypherpunk's library — a personal collection of good public-domain reads.
+> A cypherpunk's library — a personal collection of good public-domain reads.
 
 A small landing page for a curated, public-domain book collection. The hero
 features an infinite 3D book carousel that auto-scrolls and reacts to the cursor
