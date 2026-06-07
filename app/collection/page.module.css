@@ -1,0 +1,54 @@
+/* paper stage, matching the landing surface so the pages feel like one place */
+.shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(125% 70% at 78% -4%, var(--bg-tint) 0%, var(--bg) 52%),
+    var(--bg);
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(8px, 2vh, 28px) clamp(20px, 5vw, 56px) clamp(80px, 12vh, 140px);
+}
+
+.back {
+  display: inline-block;
+  margin-bottom: clamp(28px, 6vh, 64px);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.16s ease;
+}
+.back:hover {
+  color: var(--fg);
+}
+
+.header {
+  margin-bottom: clamp(28px, 5vh, 44px);
+}
+.title {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  font-size: clamp(2.25rem, 5.2vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--fg);
+}
+.lead {
+  margin-top: 16px;
+  max-width: 56ch;
+  font-size: clamp(1rem, 0.5vw + 0.8rem, 1.0625rem);
+  line-height: 1.6;
+  color: var(--muted);
+  text-wrap: pretty;
+}

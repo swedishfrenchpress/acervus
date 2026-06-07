@@ -1,3 +1,4 @@
+import Link from "next/link";
 import styles from "./Hero.module.css";
 
 // The supporting column: the one-line framing, the call to action, and the
@@ -11,9 +12,9 @@ export default function Intro() {
         cypherpunk. Nothing for sale, nothing to take down.
       </p>
       <div className={styles.actions}>
-        <a href="#" className={styles.primary}>
+        <Link href="/collection" className={styles.primary}>
           Browse the collection
-        </a>
+        </Link>
       </div>
       <p className={styles.footnote}>
         This shelf is public domain end to end. For everything else, there&rsquo;s{" "}

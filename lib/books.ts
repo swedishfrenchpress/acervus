@@ -205,7 +205,7 @@ books[BEY] = {
   year: 1991,
 };
 
-const ZIMMERMANN = 9; // mustard gold — link-out, matches the yellow PGP cover
+const ZIMMERMANN = 9; // mustard gold — reproduced in-site, matches the yellow PGP cover
 books[ZIMMERMANN] = {
   ...books[ZIMMERMANN],
   slug: "why-i-wrote-pgp",
@@ -213,8 +213,8 @@ books[ZIMMERMANN] = {
   author: "Philip Zimmermann",
   series: "A Cypherpunk's Library",
   cover: "/covers/why-i-wrote-pgp.png",
-  external: "https://www.philzimmermann.com/EN/essays/WhyIWrotePGP.html",
-  externalLabel: "philzimmermann.com",
+  source: "https://www.philzimmermann.com/EN/essays/WhyIWrotePGP.html",
+  sourceLabel: "philzimmermann.com",
   description:
     "Zimmermann's essay on why he built PGP and gave it away: in an age of " +
     "automated surveillance, the ability to encrypt is a precondition of a free " +
@@ -244,6 +244,98 @@ books[HILDEBRAND] = {
     "the engineering that makes it survivable.",
   year: 2026,
   pages: 587,
+};
+
+// --- four more, overlaid onto dark placeholder slots ---
+// Three are read in-site (prose in content/texts, carrying source/sourceLabel);
+// one is a PDF read inline (Anderson's paper, like Finney/Hildebrand). The dark
+// slots keep the light titles legible on the spine/plate until cover art lands.
+// As always: replace in place, never push, so the marquee geometry is untouched.
+
+const GOLDSTEIN = 14; // near-black
+books[GOLDSTEIN] = {
+  ...books[GOLDSTEIN],
+  slug: "meditations-on-cypherpunk-nightmares",
+  title: "Meditations on Cypherpunk Nightmares",
+  author: "Michael Goldstein",
+  series: "A Cypherpunk's Library",
+  source:
+    "https://nakamotoinstitute.org/mempool/meditations-on-cypherpunk-nightmares/",
+  sourceLabel: "Nakamoto Institute",
+  description:
+    "Michael Goldstein reads Tim May's crypto anarchy through the Stoics: if all " +
+    "information will inevitably reach the market, the cypherpunk's defense is not " +
+    "only strong cryptography but an ancient discipline of virtue — live as though " +
+    "your secrets are already leaked.",
+  year: 2014,
+};
+
+const ECASH = 17; // walnut brown
+books[ECASH] = {
+  ...books[ECASH],
+  slug: "the-beauty-of-ecash",
+  title: "The Beauty of eCash",
+  author: "Hal Finney",
+  series: "A Cypherpunk's Library",
+  source: "https://nakamotoinstitute.org/library/the-beauty-of-ecash/",
+  sourceLabel: "Nakamoto Institute",
+  description:
+    "Hal Finney on digital cash as a collector's object: a note to the cypherpunks " +
+    "list on how the unforgeable numbers of an anonymous banknote might be made " +
+    "beautiful — rarity, fingerprints, and fractals tied to the validity of the " +
+    "cash itself.",
+  year: 1994,
+};
+
+const OCALAN = 10; // plum
+books[OCALAN] = {
+  ...books[OCALAN],
+  slug: "definition-of-democratic-civilization",
+  title: "Definition of Democratic Civilization",
+  author: "Abdullah Öcalan",
+  series: "A Cypherpunk's Library",
+  source: "https://github.com/darkrenaissance/darkfi/blob/master/IDEOLOGY.md",
+  sourceLabel: "darkrenaissance/darkfi",
+  description:
+    "The text the DarkFi project adopted as its IDEOLOGY: Abdullah Öcalan's " +
+    "definition of the democratic civilization system — moral and political " +
+    "society as the stateless, free counter-history to capital and the " +
+    "nation-state. Excerpted from The Sociology of Freedom, Volume 3.",
+  year: 2020,
+};
+
+const ANDERSON = 7; // signal red — a PDF paper, read inline (like Finney/Hildebrand)
+books[ANDERSON] = {
+  ...books[ANDERSON],
+  slug: "of-cypherpunks-and-sousveillance",
+  title: "Of Cypherpunks and Sousveillance",
+  author: "Patrick Anderson",
+  series: "A Cypherpunk's Library",
+  pdf: "/books/of-cypherpunks-and-sousveillance.pdf",
+  description:
+    "Patrick Anderson's scholarly account of cypherpunk philosophy — “privacy for " +
+    "the weak, transparency for the powerful” — as a two-sided data activism of " +
+    "privacy and sousveillance for resisting surveillance institutions at the " +
+    "systemic level. Published in Surveillance & Society (2022).",
+  year: 2022,
+};
+
+const VALKENBURGH = 5; // burnt orange — reproduced in-site
+books[VALKENBURGH] = {
+  ...books[VALKENBURGH],
+  slug: "your-secret-right-to-cash",
+  title: "Your Secret Right to Cash",
+  author: "Peter Van Valkenburgh",
+  series: "A Cypherpunk's Library",
+  source: "https://valkenburgh.tumblr.com/post/165558410543/your-secret-right-to-cash",
+  sourceLabel: "valkenburgh.tumblr.com",
+  description:
+    "Peter Van Valkenburgh on cash as a “secret right”: censorship-resistant, " +
+    "private payment was guaranteed for centuries by the physical nature of the " +
+    "world — never debated because never threatened. Electronic money quietly " +
+    "removed it, and we should reckon with the cost before celebrating the death " +
+    "of cash.",
+  year: 2017,
 };
 
 /** Look up a book by its URL slug (undefined for placeholders / unknown slugs). */

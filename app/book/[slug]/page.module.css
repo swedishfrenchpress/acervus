@@ -255,6 +255,21 @@
   margin-top: 1em;
 }
 
+.prose ol,
+.prose ul {
+  margin-top: 1.25em;
+  padding-left: 1.5em;
+}
+.prose li {
+  margin-top: 0.5em;
+}
+.prose li::marker {
+  color: var(--muted);
+}
+.prose strong {
+  font-weight: 600;
+}
+
 .prose hr {
   width: 38%;
   margin: 2.5em auto;

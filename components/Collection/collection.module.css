@@ -1,0 +1,436 @@
+/* The browse view — search + filters + a grid/list of every real book. Colours
+   come from the theme tokens only (the lone literal is each plate's per-book
+   background, set inline, exactly as the book page does). */
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------------------------------------------------------------- controls -- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.search {
+  position: relative;
+  flex: 1 1 280px;
+  min-width: 0;
+}
+.searchIcon {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 17px;
+  height: 17px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.searchInput {
+  width: 100%;
+  height: 46px;
+  padding: 0 16px 0 42px;
+  font: inherit;
+  font-size: 15px;
+  color: var(--fg);
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  transition: border-color 0.16s ease, box-shadow 0.16s ease;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.searchInput::placeholder {
+  color: var(--muted);
+}
+.searchInput:focus-visible {
+  outline: none;
+  border-color: var(--fg);
+  box-shadow: 0 0 0 1px var(--fg);
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Filters disclosure trigger */
+.filtersBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fg);
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  transition: border-color 0.16s ease, background-color 0.16s ease;
+}
+.filtersBtn svg {
+  width: 17px;
+  height: 17px;
+}
+.filtersBtn:hover {
+  border-color: var(--muted);
+}
+.filtersBtnOn {
+  border-color: var(--fg);
+}
+.filtersBtn:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cta-fg);
+  background: var(--cta-bg);
+  border-radius: 999px;
+}
+
+/* Segmented grid / list toggle */
+.viewToggle {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 9px;
+}
+.viewBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  transition: color 0.16s ease, background-color 0.16s ease;
+}
+.viewBtn svg {
+  width: 18px;
+  height: 18px;
+}
+.viewBtn:hover {
+  color: var(--fg);
+}
+.viewBtnOn {
+  color: var(--fg);
+  background: var(--bg);
+  box-shadow: 0 1px 2px rgba(40, 36, 18, 0.16);
+}
+.viewBtn:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .viewBtn {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* ------------------------------------------------------------------ facets -- */
+.facets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(18px, 3vw, 32px);
+  align-items: flex-start;
+  margin-bottom: 18px;
+  padding: 20px;
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.facetGroup {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.facetLegend {
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.facetOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.facetPill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  font-size: 13px;
+  color: var(--fg);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.16s ease, background-color 0.16s ease,
+    color 0.16s ease;
+}
+.facetPill:hover {
+  border-color: var(--muted);
+}
+.facetPill:focus-within {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+.facetPillOn {
+  color: var(--cta-fg);
+  background: var(--cta-bg);
+  border-color: var(--cta-border);
+}
+.facetCount {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.facetPillOn .facetCount {
+  color: inherit;
+  opacity: 0.7;
+}
+.facetClear {
+  align-self: center;
+  padding: 6px 4px;
+  font-size: 13px;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.facetClear:hover {
+  color: var(--fg);
+}
+.facetClear:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+
+.count {
+  margin-bottom: 20px;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* -------------------------------------------------------------------- grid -- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(154px, 1fr));
+  gap: clamp(20px, 3vw, 36px) clamp(16px, 2.4vw, 28px);
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+}
+.cardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-top: 12px;
+}
+.cardTitle {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+}
+.cardAuthor {
+  font-size: 13px;
+  color: var(--muted);
+}
+.card:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* -------------------------------------------------------------------- list -- */
+.list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--line);
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 13px 6px;
+  color: inherit;
+  border-bottom: 1px solid var(--line);
+  transition: background-color 0.16s ease;
+}
+.row:hover {
+  background: var(--bg-tint);
+}
+.row:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+.rowMain {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.rowTitle {
+  font-size: 15.5px;
+  font-weight: 500;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowAuthor {
+  font-size: 13px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rowYear {
+  flex-shrink: 0;
+  font-size: 13px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------ empty -- */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(48px, 12vh, 96px) 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* ------------------------------------------------------------------ cover -- */
+.cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1368 / 2000;
+  object-fit: cover;
+  background: var(--bg-tint);
+  border-radius: 2px 6px 6px 2px;
+  box-shadow:
+    0 1px 1px rgba(40, 36, 18, 0.16),
+    0 14px 30px rgba(40, 36, 18, 0.2),
+    inset 6px 0 14px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease;
+}
+.coverCard {
+  width: 100%;
+}
+.card:hover .coverCard {
+  transform: translateY(-4px);
+  box-shadow:
+    0 2px 2px rgba(40, 36, 18, 0.2),
+    0 22px 44px rgba(40, 36, 18, 0.26),
+    inset 6px 0 14px rgba(0, 0, 0, 0.18);
+}
+.coverRow {
+  width: 38px;
+  flex-shrink: 0;
+  border-radius: 1px 3px 3px 1px;
+  box-shadow:
+    0 1px 1px rgba(40, 36, 18, 0.18),
+    inset 4px 0 9px rgba(0, 0, 0, 0.18);
+}
+
+/* typographic plate — the no-cover fallback (mirrors the book page's plate) */
+.plate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  overflow: hidden;
+}
+.plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 26%,
+      rgba(0, 0, 0, 0.14) 100%
+    ),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 6px, transparent 6px);
+}
+.plateTitle {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  font-size: clamp(0.95rem, 2.4vw, 1.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+/* the row thumb is too small for type — show just the coloured spine */
+.coverRow .plateTitle {
+  display: none;
+}
+.coverRow.plate {
+  padding: 0;
+}
+
+/* --------------------------------------------------------------- responsive -- */
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  .toolbar {
+    flex: 1 1 auto;
+    justify-content: space-between;
+  }
+}
