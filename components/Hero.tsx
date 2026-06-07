@@ -3,8 +3,6 @@ import styles from "./Hero.module.css";
 export default function Hero() {
   return (
     <section className={styles.hero}>
-      <p className={styles.eyebrow}>Free to read. Free to keep.</p>
-
       {/* Stacked so each line can rise on its own beat. Screen readers still
           read it as one continuous heading. */}
       <h1 className={styles.title}>

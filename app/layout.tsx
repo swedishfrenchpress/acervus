@@ -24,14 +24,31 @@ export const metadata: Metadata = {
     "A personal collection of good public-domain reads, curated by some random cypherpunk. Free to read, free to keep.",
 };
 
+// Set the theme on <html> before the first paint so there's no flash of the
+// wrong palette. This must run synchronously during HTML parse — next/script's
+// beforeInteractive defers to the Next runtime (after parse) in the App Router,
+// so a plain inline <script> is the FOUC-free path. It reads a saved choice,
+// else the OS preference, and writes [data-theme] (+ color-scheme) that the
+// tokens in globals.css key off. suppressHydrationWarning silences the expected
+// diff between the server's bare <html> and the script-mutated one.
+const THEME_INIT = `(function(){try{var e=document.documentElement,s=localStorage.getItem('theme'),t=(s==='dark'||s==='light')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');e.setAttribute('data-theme',t);e.style.colorScheme=t;}catch(_){}})();`;
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${alphaLyrae.variable}`}>
-      <body>{children}</body>
+    <html
+      lang="en"
+      className={`${inter.variable} ${alphaLyrae.variable}`}
+      suppressHydrationWarning
+    >
+      <body>
+        {/* First child of <body>: runs during parse, before any content paints. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        {children}
+      </body>
     </html>
   );
 }

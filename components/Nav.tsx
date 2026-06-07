@@ -1,5 +1,6 @@
 import styles from "./Nav.module.css";
 import GlitchLogo from "./GlitchLogo";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Nav() {
   return (
@@ -9,6 +10,7 @@ export default function Nav() {
         <a href="#" className={styles.link}>
           About us
         </a>
+        <ThemeToggle />
       </nav>
     </header>
   );

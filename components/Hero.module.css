@@ -10,33 +10,23 @@
   pointer-events: none;
 
   display: grid;
-  grid-template-columns: minmax(0, 1fr) min(31ch, 38%);
-  /* eyebrow + title sit at the top-left; the third row stretches to fill the
-     remaining height so the aside can drop to the bottom, just above the shelf. */
-  grid-template-rows: auto auto 1fr;
+  grid-template-columns: minmax(0, 1fr) min(40ch, 42%);
+  /* title sits at the top-left; the second row stretches to fill the remaining
+     height so the aside can drop to the bottom, just above the shelf. */
+  grid-template-rows: auto 1fr;
   grid-template-areas:
-    "eyebrow ."
-    "title   ."
-    ".       aside";
+    "title ."
+    ".     aside";
   align-content: start;
   column-gap: clamp(28px, 4vw, 72px);
   padding: clamp(4px, 2vh, 26px) clamp(20px, 4vw, 56px) 0;
 }
 
-.eyebrow {
-  grid-area: eyebrow;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-  color: var(--muted);
-  animation: heroRise 0.85s var(--ease-out-expo) 0.05s both;
-}
-
 /* the colossal, left-set wordmark headline */
 .title {
   grid-area: title;
-  margin: clamp(8px, 1.6vh, 20px) 0 0;
+  /* the masthead's first element now; the section padding-top spaces it cleanly */
+  margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 500;
   font-feature-settings: "calt" 1;
@@ -65,21 +55,23 @@
 }
 
 /* the asymmetric secondary column — dropped to the bottom-right, resting just
-   above the book covers (the margin clears the shelf's tallest covers). */
+   above the book covers (the margin clears the shelf's tallest covers). The
+   column sits right; the copy inside sets flush-left so multi-line body reads
+   cleanly (right-aligned body is ragged-left and hard to track). */
 .aside {
   grid-area: aside;
   align-self: end;
   justify-self: end;
-  max-width: 31ch;
+  max-width: 40ch;
   /* The tallest covers top out ≈ 283px + the shelf's 9vh tilt-bottom above the
      base; mirror that so the aside keeps a steady gap above them at any height. */
   margin-bottom: calc(330px + 9vh);
-  text-align: right;
+  text-align: left;
   animation: heroRise 0.95s var(--ease-out-expo) 0.46s both;
 }
 
 .subtitle {
-  font-size: clamp(15px, 1.05vw, 17px);
+  font-size: clamp(1rem, 0.55vw + 0.72rem, 1.125rem);
   line-height: 1.62;
   color: var(--muted);
   text-wrap: pretty;
@@ -88,7 +80,7 @@
 .actions {
   margin-top: 24px;
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   gap: 12px;
 }
 
@@ -97,6 +89,7 @@
   font-size: 13px;
   line-height: 1.6;
   color: var(--muted);
+  text-wrap: pretty;
 }
 
 .footnote a {
@@ -125,9 +118,9 @@
   font-size: 14px;
   font-weight: 500;
   letter-spacing: 0.01em;
-  color: var(--bg);
-  background: linear-gradient(180deg, #2a2818 0%, #1c1b12 52%, #14130c 100%);
-  border: 1px solid rgba(8, 7, 3, 0.9);
+  color: var(--cta-fg);
+  background: var(--cta-bg);
+  border: 1px solid var(--cta-border);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.14),
     inset 0 -1px 0 rgba(0, 0, 0, 0.5),
@@ -181,7 +174,6 @@
        follows the title in normal flow instead of dropping to the bottom. */
     grid-template-rows: auto;
     grid-template-areas:
-      "eyebrow"
       "title"
       "aside";
   }
