@@ -163,12 +163,162 @@
   text-underline-offset: 2px;
 }
 
+/* ---- typographic plate: the no-cover hero fallback ---- */
+/* Reuses the cover's proportions + grounded shadow so the layout is identical
+   to a real cover; the title is set in the display face, echoing the shelf spine
+   until real art lands. */
+.plate {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1368 / 2000;
+  padding: clamp(18px, 3vw, 34px);
+  border-radius: 2px 7px 7px 2px;
+  box-shadow:
+    0 1px 1px rgba(40, 36, 18, 0.16),
+    0 26px 56px rgba(40, 36, 18, 0.26),
+    inset 7px 0 16px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+/* the same sheen + binding shadow the shelf covers carry */
+.plate::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 26%,
+      rgba(0, 0, 0, 0.14) 100%
+    ),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 7px, transparent 7px);
+}
+.plateTitle {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+  line-height: 1.06;
+  letter-spacing: -0.01em;
+  text-align: center;
+  text-wrap: balance;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* ---- in-site prose reader (the reproduced manifestos) ---- */
+.prose {
+  max-width: 68ch;
+  margin: clamp(40px, 7vh, 80px) auto 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: clamp(1.0625rem, 1.05vw + 0.9rem, 1.1875rem);
+  line-height: 1.75;
+  color: var(--fg);
+  text-wrap: pretty;
+}
+.prose > * + * {
+  margin-top: 1.25em;
+}
+.prose em {
+  font-style: italic;
+}
+
+.prose h2,
+.prose h3 {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-top: 1.8em;
+}
+.prose h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+.prose h3 {
+  font-size: clamp(1.2rem, 2.2vw, 1.4rem);
+}
+
+.prose blockquote {
+  margin-inline: 0;
+  padding-left: 1.2em;
+  border-left: 2px solid var(--line);
+  color: var(--muted);
+  font-style: italic;
+}
+.prose blockquote > * + * {
+  margin-top: 1em;
+}
+
+.prose hr {
+  width: 38%;
+  margin: 2.5em auto;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.prose a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-underline-offset: 2px;
+}
+.prose a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* monospace artifacts kept verbatim (e.g. May's .signature) — a tinted panel */
+.prose pre {
+  margin-top: 2em;
+  padding: clamp(14px, 2.4vw, 22px);
+  overflow-x: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+/* literal classnames authored inside the reproduced texts (content/texts) */
+.prose :global(.epigraph) {
+  color: var(--muted);
+  font-size: 0.95em;
+}
+.prose :global(.indent) {
+  display: inline-block;
+  padding-left: 2.4em;
+}
+
+/* source credit beneath the prose */
+.sourceNote {
+  max-width: 68ch;
+  margin: 2.6em auto 0;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.sourceNote a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 @media (max-width: 760px) {
   .hero {
     grid-template-columns: 1fr;
     align-items: start;
   }
-  .cover {
+  .cover,
+  .plate {
     max-width: 240px;
   }
   .frame {

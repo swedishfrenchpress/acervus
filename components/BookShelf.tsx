@@ -178,6 +178,12 @@ export default function BookShelf() {
                       aria-hidden
                       draggable={false}
                     />
+                  ) : b.slug && b.title ? (
+                    // Real book, art pending: set the title on the cover face so the
+                    // spine reads as an intentional typographic cover until art lands.
+                    <span className={`${styles.cover} ${styles.spine}`}>
+                      <span className={styles.spineTitle}>{b.title}</span>
+                    </span>
                   ) : (
                     <span className={styles.cover} />
                   )}

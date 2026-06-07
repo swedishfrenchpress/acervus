@@ -27,6 +27,18 @@ export type Book = {
   description?: string;
   year?: number;
   pages?: number;
+
+  // --- reproduced in-site text (the manifestos); prose lives in content/texts ---
+  /** Original URL the prose was reproduced from (drives the source credit). */
+  source?: string;
+  /** Human label for that source, e.g. "activism.net", "EFF", "Phrack 1:7". */
+  sourceLabel?: string;
+
+  // --- link-out book (full work lives elsewhere; nothing reproduced in-site) ---
+  /** External URL to read the full work. Presence makes this a link-out book. */
+  external?: string;
+  /** Label for the link-out CTA, e.g. "Nakamoto Institute" → "Read at …". */
+  externalLabel?: string;
 };
 
 // A tasteful, varied palette echoing the reference's literary covers.
@@ -77,6 +89,111 @@ books[FINNEY] = {
     "demonstration that electronic payment need not mean electronic surveillance.",
   year: 1993,
   pages: 7,
+};
+
+// --- the cypherpunk canon ---
+// Four short manifestos are reproduced in-site (their prose lives in
+// content/texts, keyed by slug — these carry `source`/`sourceLabel` but no
+// `pdf`/`cover`). Two book-length works link out (`external`/`externalLabel`).
+// Each is overlaid in place onto a dark placeholder slot — same id/color/h/t, so
+// the marquee geometry is untouched and the light title reads on the spine. Cover
+// art lands later; until then the shelf shows a typographic spine and the book
+// page a typographic plate. As with Finney: replace in place, never push entries.
+
+const HUGHES = 1; // burgundy
+books[HUGHES] = {
+  ...books[HUGHES],
+  slug: "a-cypherpunks-manifesto",
+  title: "A Cypherpunk's Manifesto",
+  author: "Eric Hughes",
+  series: "A Cypherpunk's Library",
+  source: "https://www.activism.net/cypherpunk/manifesto.html",
+  sourceLabel: "activism.net",
+  description:
+    "The founding statement of the cypherpunk movement: privacy is not secrecy " +
+    "but the power to selectively reveal oneself — and in the electronic age it " +
+    "must be defended with cryptography and code, not begged from governments.",
+  year: 1993,
+};
+
+const MAY_CA = 2; // navy
+books[MAY_CA] = {
+  ...books[MAY_CA],
+  slug: "the-crypto-anarchist-manifesto",
+  title: "The Crypto Anarchist Manifesto",
+  author: "Timothy C. May",
+  series: "A Cypherpunk's Library",
+  source: "https://www.activism.net/cypherpunk/crypto-anarchy.html",
+  sourceLabel: "activism.net",
+  description:
+    "The 1988 text that named crypto anarchy. May foresees untraceable networks, " +
+    "anonymous markets, and reputations that outweigh credit ratings — a " +
+    "printing-press-scale shift in the power of the state.",
+  year: 1988,
+};
+
+const BARLOW = 4; // forest green
+books[BARLOW] = {
+  ...books[BARLOW],
+  slug: "a-declaration-of-the-independence-of-cyberspace",
+  title: "A Declaration of the Independence of Cyberspace",
+  author: "John Perry Barlow",
+  series: "A Cypherpunk's Library",
+  source: "https://www.eff.org/cyberspace-independence",
+  sourceLabel: "EFF",
+  description:
+    "Written in Davos in 1996 against the Telecommunications Reform Act: a ringing " +
+    "refusal of government sovereignty over cyberspace — the “civilization of the " +
+    "Mind” that bodies cannot govern.",
+  year: 1996,
+};
+
+const BLANKENSHIP = 11; // midnight
+books[BLANKENSHIP] = {
+  ...books[BLANKENSHIP],
+  slug: "the-conscience-of-a-hacker",
+  title: "The Conscience of a Hacker",
+  author: "Loyd Blankenship (The Mentor)",
+  series: "A Cypherpunk's Library",
+  source: "https://phrack.org/issues/7/3.html",
+  sourceLabel: "Phrack, Vol. 1 No. 7",
+  description:
+    "Written in 1986 shortly after the author’s arrest and published in Phrack: " +
+    "“My crime is that of curiosity.” The manifesto that gave a generation its voice.",
+  year: 1986,
+};
+
+const CYPHERNOMICON = 13; // wine — link-out
+books[CYPHERNOMICON] = {
+  ...books[CYPHERNOMICON],
+  slug: "the-cyphernomicon",
+  title: "The Cyphernomicon",
+  author: "Timothy C. May",
+  series: "A Cypherpunk's Library",
+  external: "https://nakamotoinstitute.org/library/cyphernomicon/",
+  externalLabel: "Nakamoto Institute",
+  description:
+    "May’s sprawling 1994 FAQ and compendium for the cypherpunks mailing list — " +
+    "the movement’s encyclopedia of crypto, anonymity, digital cash, and the " +
+    "politics of privacy. The full work is best read at the Nakamoto Institute.",
+  year: 1994,
+};
+
+const BEY = 16; // cobalt — link-out
+books[BEY] = {
+  ...books[BEY],
+  slug: "the-temporary-autonomous-zone",
+  title: "T.A.Z.",
+  author: "Hakim Bey",
+  series: "A Cypherpunk's Library",
+  external:
+    "https://theanarchistlibrary.org/library/hakim-bey-t-a-z-the-temporary-autonomous-zone-ontological-anarchy-poetic-terrorism",
+  externalLabel: "The Anarchist Library",
+  description:
+    "Hakim Bey’s anti-copyright classic on the Temporary Autonomous Zone: the " +
+    "uprising that evades the map, the pirate utopia of the network age. Read the " +
+    "full text at The Anarchist Library.",
+  year: 1991,
 };
 
 /** Look up a book by its URL slug (undefined for placeholders / unknown slugs). */

@@ -105,6 +105,38 @@ img.cover {
   object-position: center;
 }
 
+/* real book, art pending: the title set as a typographic cover. Rides the same
+   .cover face (so it keeps the 3D plane, sheen ::after and elevation shadow);
+   .spine only centers the vertical title inside it. Plain placeholders and real
+   img.covers are untouched. */
+/* `.book > .spine` (0,2,0) must out-specify the earlier `.book > span` (0,1,1)
+   rule that sets display:block, or this never becomes a flex container. */
+.book > .spine {
+  display: flex;
+  align-items: center;
+  /* Each cover's left half is occluded by its nearer left-hand neighbour at rest,
+     so the right strip is the visible one. Anchor the title there (flex-end) and
+     read it top-to-bottom, columns right-to-left (vertical-rl), so the START sits
+     at the visible right edge; a focused book pops out and reveals the whole title. */
+  justify-content: flex-end;
+  padding: 16px 12px 16px 6px;
+}
+.spineTitle {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  max-height: calc(var(--h) - 32px);
+  max-width: calc(var(--book-w) * 0.62);
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  font-size: clamp(14px, calc(var(--book-w) * 0.12), 20px);
+  line-height: 1.16;
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.96);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  overflow: hidden;
+}
+
 /* the real (linked) book: signal it's clickable, and show keyboard focus
    against the moving shelf. Placeholders keep the default cursor. */
 .linked {
