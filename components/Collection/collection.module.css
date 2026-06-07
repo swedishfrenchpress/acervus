@@ -1,6 +1,6 @@
-/* The browse view — search + filters + a grid/list of every real book. Colours
-   come from the theme tokens only (the lone literal is each plate's per-book
-   background, set inline, exactly as the book page does). */
+/* The browse view: search + a Format filter + a grid/list of every real book.
+   Colours come from the theme tokens only (the lone literal is each plate's
+   per-book background, set inline as --plate-bg, exactly as the book page does). */
 
 .srOnly {
   position: absolute;
@@ -20,7 +20,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .search {
@@ -64,49 +64,50 @@
 .toolbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 10px;
 }
 
-/* Filters disclosure trigger */
-.filtersBtn {
+/* Format filter: three always-visible pills (Text / PDF / External). */
+.formats {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.fmtPill {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 46px;
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 500;
+  gap: 7px;
+  height: 36px;
+  padding: 0 14px;
+  font-size: 13px;
   color: var(--fg);
-  background: var(--bg-tint);
+  background: transparent;
   border: 1px solid var(--line);
-  border-radius: 8px;
-  transition: border-color 0.16s ease, background-color 0.16s ease;
+  border-radius: 999px;
+  transition: border-color 0.16s ease, background-color 0.16s ease,
+    color 0.16s ease;
 }
-.filtersBtn svg {
-  width: 17px;
-  height: 17px;
-}
-.filtersBtn:hover {
+.fmtPill:hover {
   border-color: var(--muted);
 }
-.filtersBtnOn {
-  border-color: var(--fg);
-}
-.filtersBtn:focus-visible {
+.fmtPill:focus-visible {
   outline: 2px solid var(--fg);
   outline-offset: 2px;
 }
-.badge {
-  display: inline-grid;
-  place-items: center;
-  min-width: 20px;
-  height: 20px;
-  padding: 0 6px;
-  font-size: 12px;
-  font-weight: 600;
+.fmtPillOn {
   color: var(--cta-fg);
   background: var(--cta-bg);
-  border-radius: 999px;
+  border-color: var(--cta-border);
+}
+.fmtCount {
+  font-size: 12px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.fmtPillOn .fmtCount {
+  color: inherit;
+  opacity: 0.7;
 }
 
 /* Segmented grid / list toggle */
@@ -145,99 +146,11 @@
   outline: 2px solid var(--fg);
   outline-offset: 2px;
 }
-
 @media (pointer: coarse) {
   .viewBtn {
     width: 42px;
     height: 42px;
   }
-}
-
-/* ------------------------------------------------------------------ facets -- */
-.facets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: clamp(18px, 3vw, 32px);
-  align-items: flex-start;
-  margin-bottom: 18px;
-  padding: 20px;
-  background: var(--bg-tint);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-}
-.facetGroup {
-  min-width: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.facetLegend {
-  padding: 0;
-  margin-bottom: 10px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
-.facetOptions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-.facetPill {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 12px;
-  font-size: 13px;
-  color: var(--fg);
-  background: transparent;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  cursor: pointer;
-  user-select: none;
-  transition: border-color 0.16s ease, background-color 0.16s ease,
-    color 0.16s ease;
-}
-.facetPill:hover {
-  border-color: var(--muted);
-}
-.facetPill:focus-within {
-  outline: 2px solid var(--fg);
-  outline-offset: 2px;
-}
-.facetPillOn {
-  color: var(--cta-fg);
-  background: var(--cta-bg);
-  border-color: var(--cta-border);
-}
-.facetCount {
-  font-size: 12px;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-.facetPillOn .facetCount {
-  color: inherit;
-  opacity: 0.7;
-}
-.facetClear {
-  align-self: center;
-  padding: 6px 4px;
-  font-size: 13px;
-  color: var(--muted);
-  background: transparent;
-  border: 0;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.facetClear:hover {
-  color: var(--fg);
-}
-.facetClear:focus-visible {
-  outline: 2px solid var(--fg);
-  outline-offset: 2px;
 }
 
 .count {
@@ -246,6 +159,24 @@
   letter-spacing: 0.04em;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+}
+.clear {
+  padding: 0;
+  font: inherit;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: transparent;
+  border: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.clear:hover {
+  color: var(--fg);
+}
+.clear:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
 }
 
 /* -------------------------------------------------------------------- grid -- */
@@ -262,7 +193,7 @@
 .cardBody {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
   padding-top: 12px;
 }
 .cardTitle {
@@ -349,17 +280,37 @@
 
 /* ------------------------------------------------------------------ cover -- */
 .cover {
+  position: relative;
   display: block;
   width: 100%;
   aspect-ratio: 1368 / 2000;
-  object-fit: cover;
   background: var(--bg-tint);
   border-radius: 2px 6px 6px 2px;
+  overflow: hidden;
   box-shadow:
     0 1px 1px rgba(40, 36, 18, 0.16),
-    0 14px 30px rgba(40, 36, 18, 0.2),
-    inset 6px 0 14px rgba(0, 0, 0, 0.18);
+    0 14px 30px rgba(40, 36, 18, 0.2);
   transition: transform 0.2s var(--ease-out-expo), box-shadow 0.2s ease;
+}
+/* shared binding shadow + sheen, painted over art and plates alike */
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0 6px, transparent 6px),
+    linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0) 30%,
+      rgba(0, 0, 0, 0.1) 100%
+    );
+}
+.coverImg {
+  object-fit: cover;
 }
 .coverCard {
   width: 100%;
@@ -368,60 +319,107 @@
   transform: translateY(-4px);
   box-shadow:
     0 2px 2px rgba(40, 36, 18, 0.2),
-    0 22px 44px rgba(40, 36, 18, 0.26),
-    inset 6px 0 14px rgba(0, 0, 0, 0.18);
+    0 22px 44px rgba(40, 36, 18, 0.26);
 }
 .coverRow {
-  width: 38px;
+  width: 40px;
   flex-shrink: 0;
   border-radius: 1px 3px 3px 1px;
-  box-shadow:
-    0 1px 1px rgba(40, 36, 18, 0.18),
-    inset 4px 0 9px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 1px 1px rgba(40, 36, 18, 0.18);
 }
 
-/* typographic plate — the no-cover fallback (mirrors the book page's plate) */
+/* typographic plate: the no-cover fallback, composed like a real cover */
 .plate {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px;
-  overflow: hidden;
+  background: var(--plate-bg);
 }
-.plate::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      105deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0) 26%,
-      rgba(0, 0, 0, 0.14) 100%
-    ),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.22) 0 6px, transparent 6px);
+/* card plate: a poster lower-third. The slot colour fills the cover; a dark
+   scrim sits behind the text block so white type is legible on ANY slot. */
+.coverCard.plate {
+  display: flex;
+  align-items: flex-end;
+}
+.plateInner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  padding: 30px 13px 13px;
+  background: linear-gradient(
+    to top,
+    rgba(8, 7, 3, 0.74) 0%,
+    rgba(8, 7, 3, 0.34) 48%,
+    rgba(8, 7, 3, 0) 100%
+  );
+}
+.plateSeries {
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
 }
 .plateTitle {
-  position: relative;
-  z-index: 1;
   font-family: var(--font-display), system-ui, sans-serif;
   font-feature-settings: "calt" 1;
   font-weight: 500;
-  font-size: clamp(0.95rem, 2.4vw, 1.25rem);
-  line-height: 1.08;
+  font-size: clamp(0.95rem, 2.4vw, 1.2rem);
+  line-height: 1.1;
   letter-spacing: -0.01em;
-  text-align: center;
   text-wrap: balance;
-  color: rgba(255, 255, 255, 0.94);
+  color: rgba(255, 255, 255, 0.96);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
 }
-/* the row thumb is too small for type — show just the coloured spine */
-.coverRow .plateTitle {
-  display: none;
+.plateAuthor {
+  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.84);
 }
+.plateYear {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  font-variant-numeric: tabular-nums;
+}
+/* row plate: a small monogram on a uniformly darkened slot, legible at 40px */
 .coverRow.plate {
-  padding: 0;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    var(--plate-bg);
+}
+.plateMonogram {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.94);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+/* external link-out marker: a quiet dark chip with an arrow, top-right */
+.extBadge {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  font-size: 11px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(8, 7, 3, 0.58);
+  border-radius: 999px;
+}
+.coverRow .extBadge {
+  top: 2px;
+  right: 2px;
+  width: 15px;
+  height: 15px;
+  font-size: 9px;
 }
 
 /* --------------------------------------------------------------- responsive -- */

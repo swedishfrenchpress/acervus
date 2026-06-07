@@ -117,7 +117,7 @@ books[HUGHES] = {
   sourceLabel: "activism.net",
   description:
     "The founding statement of the cypherpunk movement: privacy is not secrecy " +
-    "but the power to selectively reveal oneself — and in the electronic age it " +
+    "but the power to selectively reveal oneself, and in the electronic age it " +
     "must be defended with cryptography and code, not begged from governments.",
   year: 1993,
 };
@@ -134,7 +134,7 @@ books[MAY_CA] = {
   sourceLabel: "activism.net",
   description:
     "The 1988 text that named crypto anarchy. May foresees untraceable networks, " +
-    "anonymous markets, and reputations that outweigh credit ratings — a " +
+    "anonymous markets, and reputations that outweigh credit ratings: a " +
     "printing-press-scale shift in the power of the state.",
   year: 1988,
 };
@@ -151,7 +151,7 @@ books[BARLOW] = {
   sourceLabel: "EFF",
   description:
     "Written in Davos in 1996 against the Telecommunications Reform Act: a ringing " +
-    "refusal of government sovereignty over cyberspace — the “civilization of the " +
+    "refusal of government sovereignty over cyberspace: the “civilization of the " +
     "Mind” that bodies cannot govern.",
   year: 1996,
 };
@@ -182,7 +182,7 @@ books[CYPHERNOMICON] = {
   external: "https://nakamotoinstitute.org/library/cyphernomicon/",
   externalLabel: "Nakamoto Institute",
   description:
-    "May’s sprawling 1994 FAQ and compendium for the cypherpunks mailing list — " +
+    "May’s sprawling 1994 FAQ and compendium for the cypherpunks mailing list, " +
     "the movement’s encyclopedia of crypto, anonymity, digital cash, and the " +
     "politics of privacy. The full work is best read at the Nakamoto Institute.",
   year: 1994,
@@ -218,7 +218,7 @@ books[ZIMMERMANN] = {
   description:
     "Zimmermann's essay on why he built PGP and gave it away: in an age of " +
     "automated surveillance, the ability to encrypt is a precondition of a free " +
-    "society — privacy must be the default, not a favour granted by the powerful.",
+    "society: privacy must be the default, not a favour granted by the powerful.",
   year: 1991,
 };
 
@@ -237,7 +237,7 @@ books[HILDEBRAND] = {
   pdf: "/books/the-praxeology-of-privacy.pdf",
   description:
     "Max Hildebrand's synthesis of two traditions that reach the same end from " +
-    "opposite starts — Austrian economics, which deduces from the fact of human " +
+    "opposite starts: Austrian economics, which deduces from the fact of human " +
     "action that observation is the precondition of state predation, and the " +
     "cypherpunks, who wrote the running code that proves these systems can be " +
     "defended. A treatise on why privacy matters, and a working field guide to " +
@@ -265,7 +265,7 @@ books[GOLDSTEIN] = {
   description:
     "Michael Goldstein reads Tim May's crypto anarchy through the Stoics: if all " +
     "information will inevitably reach the market, the cypherpunk's defense is not " +
-    "only strong cryptography but an ancient discipline of virtue — live as though " +
+    "only strong cryptography but an ancient discipline of virtue: live as though " +
     "your secrets are already leaked.",
   year: 2014,
 };
@@ -282,7 +282,7 @@ books[ECASH] = {
   description:
     "Hal Finney on digital cash as a collector's object: a note to the cypherpunks " +
     "list on how the unforgeable numbers of an anonymous banknote might be made " +
-    "beautiful — rarity, fingerprints, and fractals tied to the validity of the " +
+    "beautiful: rarity, fingerprints, and fractals tied to the validity of the " +
     "cash itself.",
   year: 1994,
 };
@@ -298,7 +298,7 @@ books[OCALAN] = {
   sourceLabel: "darkrenaissance/darkfi",
   description:
     "The text the DarkFi project adopted as its IDEOLOGY: Abdullah Öcalan's " +
-    "definition of the democratic civilization system — moral and political " +
+    "definition of the democratic civilization system: moral and political " +
     "society as the stateless, free counter-history to capital and the " +
     "nation-state. Excerpted from The Sociology of Freedom, Volume 3.",
   year: 2020,
@@ -313,11 +313,12 @@ books[ANDERSON] = {
   series: "A Cypherpunk's Library",
   pdf: "/books/of-cypherpunks-and-sousveillance.pdf",
   description:
-    "Patrick Anderson's scholarly account of cypherpunk philosophy — “privacy for " +
-    "the weak, transparency for the powerful” — as a two-sided data activism of " +
+    "Patrick Anderson's scholarly account of cypherpunk philosophy (“privacy for " +
+    "the weak, transparency for the powerful”) as a two-sided data activism of " +
     "privacy and sousveillance for resisting surveillance institutions at the " +
     "systemic level. Published in Surveillance & Society (2022).",
   year: 2022,
+  pages: 17,
 };
 
 const VALKENBURGH = 5; // burnt orange — reproduced in-site
@@ -332,7 +333,7 @@ books[VALKENBURGH] = {
   description:
     "Peter Van Valkenburgh on cash as a “secret right”: censorship-resistant, " +
     "private payment was guaranteed for centuries by the physical nature of the " +
-    "world — never debated because never threatened. Electronic money quietly " +
+    "world, never debated because never threatened. Electronic money quietly " +
     "removed it, and we should reckon with the cost before celebrating the death " +
     "of cash.",
   year: 2017,

@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.cypherpunkbooks.com"),
   title: {
     default: "The Cypherpunk Library",
-    template: "%s — The Cypherpunk Library",
+    template: "%s · The Cypherpunk Library",
   },
   description: DESCRIPTION,
   openGraph: {

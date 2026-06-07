@@ -93,7 +93,7 @@ export default function GlitchLogo() {
   return (
     <Link
       href="/"
-      aria-label="The Cypherpunk Library — home"
+      aria-label="The Cypherpunk Library, home"
       className={cls}
       style={{ fontFeatureSettings: ff }}
       onPointerEnter={onEnter}

@@ -41,17 +41,35 @@
 }
 
 .cover {
+  position: relative;
   width: 100%;
-  height: auto;
   aspect-ratio: 1368 / 2000; /* the cover's true proportions */
-  object-fit: cover;
   border-radius: 2px 7px 7px 2px;
+  overflow: hidden;
   background: var(--bg-tint);
-  /* a book sitting on the page: thin edge highlight, grounded drop, spine shade */
+  /* a book sitting on the page: thin edge highlight, grounded drop */
   box-shadow:
     0 1px 1px rgba(40, 36, 18, 0.16),
-    0 26px 56px rgba(40, 36, 18, 0.26),
-    inset 7px 0 16px rgba(0, 0, 0, 0.2);
+    0 26px 56px rgba(40, 36, 18, 0.26);
+}
+.coverImg {
+  object-fit: cover;
+}
+/* spine shade + sheen, painted over the (next/image) art */
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgba(0, 0, 0, 0.2) 0 7px, transparent 7px),
+    linear-gradient(
+      105deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0) 28%,
+      rgba(0, 0, 0, 0.08) 100%
+    );
 }
 
 .series {
@@ -137,6 +155,31 @@
   outline-offset: 3px;
 }
 
+/* PDF action row: primary "Open" + a quiet "Download" */
+.actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-top: 30px;
+}
+.actions .download {
+  margin-top: 0;
+}
+.altLink {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.altLink:hover {
+  color: var(--fg);
+}
+.altLink:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+
 /* ---- embedded reader ---- */
 .reader {
   margin-top: clamp(40px, 7vh, 80px);
@@ -163,6 +206,52 @@
   text-underline-offset: 2px;
 }
 
+/* book-length PDF: a lead-in note, then an opt-in inline reader */
+.longNote {
+  max-width: 60ch;
+  margin: 0 auto;
+  font-size: 15px;
+  line-height: 1.65;
+  text-align: center;
+  color: var(--muted);
+}
+.longNote a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.inline {
+  margin-top: 24px;
+  text-align: center;
+}
+.inlineSummary {
+  display: inline-block;
+  padding: 11px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+  background: var(--bg-tint);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  cursor: pointer;
+  list-style: none;
+  transition: border-color 0.16s ease;
+}
+.inlineSummary::-webkit-details-marker {
+  display: none;
+}
+.inlineSummary:hover {
+  border-color: var(--muted);
+}
+.inlineSummary:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 2px;
+}
+.inline .frame {
+  margin-top: 18px;
+}
+
 /* ---- typographic plate: the no-cover hero fallback ---- */
 /* Reuses the cover's proportions + grounded shadow so the layout is identical
    to a real cover; the title is set in the display face, echoing the shelf spine
@@ -181,6 +270,19 @@
     0 26px 56px rgba(40, 36, 18, 0.26),
     inset 7px 0 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+}
+/* a soft dark scrim behind the centred title, so white type stays legible on
+   ANY slot colour (light cream/blush slots included), not just the dark ones */
+.plate::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 120% 80% at 50% 52%,
+    rgba(8, 7, 3, 0.5),
+    rgba(8, 7, 3, 0.18) 60%,
+    rgba(8, 7, 3, 0) 100%
+  );
 }
 /* the same sheen + binding shadow the shelf covers carry */
 .plate::after {

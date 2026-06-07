@@ -1,1 +1,1 @@
-The Cypherpunk Library — a shelf of cypherpunk manifestos and public-domain reads.
+The Cypherpunk Library: a shelf of cypherpunk manifestos and public-domain reads.

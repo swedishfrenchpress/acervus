@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 export const metadata: Metadata = {
   title: "Browse the collection",
   description:
-    "Search and browse the full Cypherpunk Library — every manifesto, essay, and treatise on the shelf, by format, author, or era.",
+    "Search and browse the full Cypherpunk Library: every manifesto, essay, and treatise on the shelf, by format.",
 };
 
 export default function CollectionPage() {
@@ -31,8 +31,8 @@ export default function CollectionPage() {
         <header className={styles.header}>
           <h1 className={styles.title}>The collection</h1>
           <p className={styles.lead}>
-            Every text on the shelf — search the canon, filter by format or era,
-            and switch between cover and list views.
+            Every text on the shelf. Search the canon, filter by format, and
+            switch between cover and list views.
           </p>
         </header>
 
