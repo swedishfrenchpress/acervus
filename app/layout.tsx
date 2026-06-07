@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/next";
 import Colophon from "@/components/Colophon";
 import "./globals.css";
 
@@ -78,6 +79,7 @@ export default function RootLayout({
         {children}
         {/* Renders nothing — logs a quiet colophon to the console, once. */}
         <Colophon />
+        <Analytics />
       </body>
     </html>
   );
