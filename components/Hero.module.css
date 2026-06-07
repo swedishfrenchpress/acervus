@@ -11,10 +11,13 @@
 
   display: grid;
   grid-template-columns: minmax(0, 1fr) min(31ch, 38%);
-  grid-template-rows: auto 1fr;
+  /* eyebrow + title sit at the top-left; the third row stretches to fill the
+     remaining height so the aside can drop to the bottom, just above the shelf. */
+  grid-template-rows: auto auto 1fr;
   grid-template-areas:
-    "eyebrow aside"
-    "title   aside";
+    "eyebrow ."
+    "title   ."
+    ".       aside";
   align-content: start;
   column-gap: clamp(28px, 4vw, 72px);
   padding: clamp(4px, 2vh, 26px) clamp(20px, 4vw, 56px) 0;
@@ -61,13 +64,16 @@
   animation-delay: 0.28s;
 }
 
-/* the asymmetric secondary column, tucked lower-right under the headline */
+/* the asymmetric secondary column — dropped to the bottom-right, resting just
+   above the book covers (the margin clears the shelf's tallest covers). */
 .aside {
   grid-area: aside;
-  align-self: start;
+  align-self: end;
   justify-self: end;
   max-width: 31ch;
-  margin-top: clamp(6px, 1.4vh, 16px);
+  /* The tallest covers top out ≈ 283px + the shelf's 9vh tilt-bottom above the
+     base; mirror that so the aside keeps a steady gap above them at any height. */
+  margin-bottom: calc(330px + 9vh);
   text-align: right;
   animation: heroRise 0.95s var(--ease-out-expo) 0.46s both;
 }
@@ -171,16 +177,21 @@
 @media (max-width: 860px) {
   .hero {
     grid-template-columns: minmax(0, 1fr);
+    /* stack and let rows size to content — no stretched row, so the aside
+       follows the title in normal flow instead of dropping to the bottom. */
+    grid-template-rows: auto;
     grid-template-areas:
       "eyebrow"
       "title"
       "aside";
   }
   .aside {
+    align-self: start;
     justify-self: start;
     text-align: left;
     max-width: min(46ch, 100%);
     margin-top: clamp(18px, 3vh, 32px);
+    margin-bottom: 0;
   }
   .actions {
     justify-content: flex-start;

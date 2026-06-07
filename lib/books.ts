@@ -41,33 +41,38 @@ export type Book = {
   externalLabel?: string;
 };
 
-// A tasteful, varied palette echoing the reference's literary covers.
-const PALETTE: Array<[string, number, number]> = [
-  ["#e7dcc4", 232, 36], // cream
-  ["#7a1f2b", 214, 40], // burgundy
-  ["#16243f", 240, 32], // navy
-  ["#e7c2cc", 208, 34], // blush
-  ["#14532d", 236, 38], // forest green
-  ["#c2410c", 220, 30], // burnt orange
-  ["#1f2733", 244, 42], // charcoal
-  ["#b51d22", 226, 34], // signal red
-  ["#0f3d3e", 212, 36], // deep teal
-  ["#d6a23c", 234, 32], // mustard gold
-  ["#3a1d52", 218, 38], // plum
-  ["#0b1f3a", 240, 30], // midnight
-  ["#6f9a6a", 206, 36], // sage
-  ["#8b1e3f", 230, 40], // wine
-  ["#1a1a1a", 222, 34], // near-black
-  ["#dfe3e6", 216, 32], // pale grey
-  ["#243b6b", 238, 36], // cobalt
-  ["#5b3a29", 210, 40], // walnut brown
+// One slim spine depth for every book — varied heights read as mismatched
+// books, but a consistent (not-too-thick) thickness keeps the row tidy.
+const SPINE = 22;
+
+// A tasteful, varied palette echoing the reference's literary covers. Each entry
+// is [color, cover height in px]; thickness is the shared SPINE above.
+const PALETTE: Array<[string, number]> = [
+  ["#e7dcc4", 232], // cream
+  ["#7a1f2b", 214], // burgundy
+  ["#16243f", 240], // navy
+  ["#e7c2cc", 208], // blush
+  ["#14532d", 236], // forest green
+  ["#c2410c", 220], // burnt orange
+  ["#1f2733", 244], // charcoal
+  ["#b51d22", 226], // signal red
+  ["#0f3d3e", 212], // deep teal
+  ["#d6a23c", 234], // mustard gold
+  ["#3a1d52", 218], // plum
+  ["#0b1f3a", 240], // midnight
+  ["#6f9a6a", 206], // sage
+  ["#8b1e3f", 230], // wine
+  ["#1a1a1a", 222], // near-black
+  ["#dfe3e6", 216], // pale grey
+  ["#243b6b", 238], // cobalt
+  ["#5b3a29", 210], // walnut brown
 ];
 
-export const books: Book[] = PALETTE.map(([color, h, t], i) => ({
+export const books: Book[] = PALETTE.map(([color, h], i) => ({
   id: i,
   color,
   h,
-  t,
+  t: SPINE,
 }));
 
 // --- the first real book ---
@@ -107,6 +112,7 @@ books[HUGHES] = {
   title: "A Cypherpunk's Manifesto",
   author: "Eric Hughes",
   series: "A Cypherpunk's Library",
+  cover: "/covers/a-cypherpunks-manifesto.png",
   source: "https://www.activism.net/cypherpunk/manifesto.html",
   sourceLabel: "activism.net",
   description:
@@ -123,6 +129,7 @@ books[MAY_CA] = {
   title: "The Crypto Anarchist Manifesto",
   author: "Timothy C. May",
   series: "A Cypherpunk's Library",
+  cover: "/covers/the-crypto-anarchist-manifesto.png",
   source: "https://www.activism.net/cypherpunk/crypto-anarchy.html",
   sourceLabel: "activism.net",
   description:
@@ -139,6 +146,7 @@ books[BARLOW] = {
   title: "A Declaration of the Independence of Cyberspace",
   author: "John Perry Barlow",
   series: "A Cypherpunk's Library",
+  cover: "/covers/a-declaration-of-the-independence-of-cyberspace.png",
   source: "https://www.eff.org/cyberspace-independence",
   sourceLabel: "EFF",
   description:
@@ -193,6 +201,23 @@ books[BEY] = {
     "Hakim Bey’s anti-copyright classic on the Temporary Autonomous Zone: the " +
     "uprising that evades the map, the pirate utopia of the network age. Read the " +
     "full text at The Anarchist Library.",
+  year: 1991,
+};
+
+const ZIMMERMANN = 9; // mustard gold — link-out, matches the yellow PGP cover
+books[ZIMMERMANN] = {
+  ...books[ZIMMERMANN],
+  slug: "why-i-wrote-pgp",
+  title: "Why I Wrote PGP",
+  author: "Philip Zimmermann",
+  series: "A Cypherpunk's Library",
+  cover: "/covers/why-i-wrote-pgp.png",
+  external: "https://www.philzimmermann.com/EN/essays/WhyIWrotePGP.html",
+  externalLabel: "philzimmermann.com",
+  description:
+    "Zimmermann's essay on why he built PGP and gave it away: in an age of " +
+    "automated surveillance, the ability to encrypt is a precondition of a free " +
+    "society — privacy must be the default, not a favour granted by the powerful.",
   year: 1991,
 };
 
