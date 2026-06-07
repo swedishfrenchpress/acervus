@@ -16,9 +16,15 @@
   /* feature-settings are driven inline by GlitchLogo; this is the resting value */
   font-feature-settings: "calt" 1;
   font-size: 22px;
+  line-height: 0.92;
   letter-spacing: -0.01em;
   color: var(--fg);
   will-change: transform;
+}
+
+/* Two-line stacked wordmark — set tight so it reads as one mark. */
+.logoLine {
+  display: block;
 }
 
 /* short, sharp glitch burst — jitter + a restrained RGB ghost */
@@ -63,15 +69,4 @@
   display: flex;
   align-items: center;
   gap: 28px;
-}
-
-.link {
-  font-size: 14px;
-  color: var(--fg);
-  opacity: 0.78;
-  transition: opacity 0.18s ease;
-}
-
-.link:hover {
-  opacity: 1;
 }

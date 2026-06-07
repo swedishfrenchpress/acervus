@@ -7,9 +7,6 @@ export default function Nav() {
     <header className={styles.nav}>
       <GlitchLogo />
       <nav className={styles.links}>
-        <a href="#" className={styles.link}>
-          About us
-        </a>
         <ThemeToggle />
       </nav>
     </header>

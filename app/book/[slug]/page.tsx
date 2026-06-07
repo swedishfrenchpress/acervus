@@ -12,9 +12,9 @@ type Params = { params: Promise<{ slug: string }> };
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const book = getBookBySlug(slug);
-  if (!book?.title) return { title: "Not found — Acervus" };
+  if (!book?.title) return { title: "Not found" };
   return {
-    title: `${book.title} — Acervus`,
+    title: book.title,
     description: book.description,
   };
 }
@@ -120,8 +120,8 @@ export default async function BookPage({ params }: Params) {
                 <a href={book.source} target="_blank" rel="noreferrer">
                   {book.sourceLabel ?? "the original source"}
                 </a>
-                . A public-domain / freely distributable text, set here in
-                Acervus&rsquo;s own hand.
+                . A public-domain / freely distributable text, set here in the
+                Cypherpunk Library&rsquo;s own hand.
               </footer>
             )}
           </>

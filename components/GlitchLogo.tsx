@@ -93,13 +93,16 @@ export default function GlitchLogo() {
   return (
     <Link
       href="/"
-      aria-label="Acervus — home"
+      aria-label="The Cypherpunk Library — home"
       className={cls}
       style={{ fontFeatureSettings: ff }}
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
     >
-      Acervus
+      {/* Stacked two-line wordmark, echoing the Hero and the OG image. Screen
+          readers get the full name from aria-label above. */}
+      <span className={styles.logoLine}>Cypherpunk</span>
+      <span className={styles.logoLine}>Library</span>
     </Link>
   );
 }

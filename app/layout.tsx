@@ -18,10 +18,33 @@ const alphaLyrae = localFont({
   display: "swap",
 });
 
+const DESCRIPTION =
+  "A personal collection of good public-domain reads, curated by some random cypherpunk. Free to read, free to keep.";
+
+// metadataBase resolves the file-based opengraph-image / twitter-image (app/)
+// to absolute https://www.cypherpunkbooks.com URLs so crawlers index them. The
+// title template lets child pages set just their own title and inherit the
+// " — The Cypherpunk Library" suffix.
 export const metadata: Metadata = {
-  title: "Acervus — One cypherpunk's library",
-  description:
-    "A personal collection of good public-domain reads, curated by some random cypherpunk. Free to read, free to keep.",
+  metadataBase: new URL("https://www.cypherpunkbooks.com"),
+  title: {
+    default: "The Cypherpunk Library",
+    template: "%s — The Cypherpunk Library",
+  },
+  description: DESCRIPTION,
+  openGraph: {
+    title: "The Cypherpunk Library",
+    description: DESCRIPTION,
+    url: "https://www.cypherpunkbooks.com",
+    siteName: "The Cypherpunk Library",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Cypherpunk Library",
+    description: DESCRIPTION,
+  },
 };
 
 // Set the theme on <html> before the first paint so there's no flash of the
