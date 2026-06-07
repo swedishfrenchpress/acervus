@@ -58,7 +58,7 @@
   margin-left: calc(-1 * var(--book-overlap));
   transform-style: preserve-3d;
   transform: translateY(var(--lift, 0px)) translateZ(var(--pop, 0px))
-    rotateY(calc(var(--book-ry) + var(--turn, 0deg))) scale(var(--scale, 1));
+    rotateY(var(--book-ry)) scale(var(--scale, 1));
   will-change: transform;
 }
 

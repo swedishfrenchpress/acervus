@@ -5,13 +5,13 @@ import Link from "next/link";
 import { books } from "@/lib/books";
 import styles from "./bookshelf.module.css";
 
-// Marquee + focus tuning.
+// Marquee + focus tuning. Only the focal book moves: it rises up and slightly
+// toward you, KEEPING the shelf's lean. Staying parallel to its neighbours means
+// it can never clip into them. Neighbours stay perfectly still.
 const SPEED = 0.45; // base marquee px per frame (leftward)
-const SPREAD = 0.7; // neighbour falloff over index distance (immediate ≈0.35, d=2 ≈0.02)
-const LIFT = 20; // px: the focal book rises
-const POP = 56; // px: the focal book comes toward you (translateZ)
-const TURN = 24; // deg: the focal book turns to face you (net rotateY ~ 0)
-const SCALE = 0.06; // focal book scale bump
+const LIFT = 60; // px: the focal book rises up off the row — the headline move
+const POP = 48; // px: lift it forward along the shelf normal so it sits cleanly in front
+const SCALE = 0.06; // a small scale bump as it rises
 const SLOW = 1; // how much peak focus slows the marquee (1 = full stop)
 const EASE = 0.16; // per-frame approach to target — the "breathing" smoothness
 
@@ -25,7 +25,7 @@ export default function BookShelf() {
   const pointer = useRef<{ x: number; y: number } | null>(null);
 
   // Smoothed per-book state, eased toward target every frame.
-  const focus = useRef<number[]>([]); // how "looked at" a book is, 0..1
+  const focus = useRef<number[]>([]); // focal weight — 1 for the book under the cursor
   const slow = useRef(0); // smoothed marquee slowdown, 0..1
 
   // Render the set three times so the track always overflows the viewport and
@@ -79,28 +79,26 @@ export default function BookShelf() {
           )
         : -1;
 
-      // --- compute eased targets: the focal book peaks at 1, its neighbours get
-      // a gentle lift that falls off with index distance (never sideways) ---
+      // --- compute eased targets: only the book under the cursor reacts
+      // (target 1); every other book eases back to rest (target 0). ---
       let peak = 0;
       for (let i = 0; i < els.length; i++) {
-        let targetF = 0;
-        if (hit >= 0) {
-          const d = Math.abs(i - hit);
-          targetF = d === 0 ? 1 : Math.exp(-(d * d) / (2 * SPREAD * SPREAD));
-        }
+        const targetF = i === hit ? 1 : 0;
         f[i] = lerp(f[i] ?? 0, targetF, EASE);
         if (f[i] > peak) peak = f[i];
       }
       slow.current = lerp(slow.current, p ? peak : 0, EASE);
 
-      // --- write transforms (writes only) ---
+      // --- write transforms (writes only). The focal book rises (--lift) and
+      // lifts forward along the shelf normal (--pop) so it sits cleanly in front
+      // of its still neighbours, keeping its shelf lean (no turn → stays parallel,
+      // so it never clips). ---
       for (let i = 0; i < els.length; i++) {
         const el = els[i];
         if (!el) continue;
         const fi = f[i];
         el.style.setProperty("--lift", `${(-LIFT * fi).toFixed(2)}px`);
         el.style.setProperty("--pop", `${(POP * fi).toFixed(2)}px`);
-        el.style.setProperty("--turn", `${(TURN * fi).toFixed(2)}deg`);
         el.style.setProperty("--scale", (1 + SCALE * fi).toFixed(3));
         el.style.setProperty("--foc", fi.toFixed(3));
         el.style.zIndex = fi > 0.02 ? String(5 + Math.round(fi * 12)) : "";
