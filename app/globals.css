@@ -3,8 +3,15 @@
   --book-overlap: 118px;
   --book-w: 150px;
 
-  /* Motion — exponential ease-out for entrances; no bounce, no elastic. */
+  /* Motion — exponential ease-out for entrances; no bounce, no elastic. The
+     expo curve drives the landing's hero/shelf and now every route's reveal;
+     quart is the gentler curve for plain fades (nav, counts, source credit).
+     These are custom properties, so they cross module boundaries freely — but
+     @keyframes do NOT (Turbopack scopes animation names per module), so the
+     shared `rise` / `fadeIn` entrance is defined locally in each module that
+     uses it, the same way heroRise / shelfRise already live with their owners. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 /* ---- Light theme (the default; also the SSR value before the theme script

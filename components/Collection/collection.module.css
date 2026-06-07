@@ -21,6 +21,9 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 14px;
+  /* Search + filters arrive just after the header, once per visit (this block
+     never remounts), so they stay still while results below re-stagger. */
+  animation: rise 0.7s var(--ease-out-expo) 0.22s backwards;
 }
 
 .search {
@@ -159,6 +162,7 @@
   letter-spacing: 0.04em;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+  animation: fadeIn 0.6s var(--ease-out-quart) 0.3s backwards;
 }
 .clear {
   padding: 0;
@@ -185,10 +189,17 @@
   grid-template-columns: repeat(auto-fill, minmax(154px, 1fr));
   gap: clamp(20px, 3vw, 36px) clamp(16px, 2.4vw, 28px);
 }
+/* Each card/row rises in on a per-item delay set inline (by index) in
+   CollectionBrowser. The grid/list container is keyed on layout + format filter,
+   so toggling a view or a filter remounts it and the whole set re-staggers; plain
+   search-as-you-type leaves the container in place, so matches resolve smoothly
+   instead of thrashing on every keystroke. `backwards` holds the hidden state
+   only through the delay, then hands transform back so the cover hover lift works. */
 .card {
   display: flex;
   flex-direction: column;
   color: inherit;
+  animation: rise 0.5s var(--ease-out-expo) backwards;
 }
 .cardBody {
   display: flex;
@@ -229,6 +240,7 @@
   color: inherit;
   border-bottom: 1px solid var(--line);
   transition: background-color 0.16s ease;
+  animation: rise 0.5s var(--ease-out-expo) backwards;
 }
 .row:hover {
   background: var(--bg-tint);
@@ -276,6 +288,7 @@
   padding: clamp(48px, 12vh, 96px) 20px;
   text-align: center;
   color: var(--muted);
+  animation: rise 0.5s var(--ease-out-expo) both;
 }
 
 /* ------------------------------------------------------------------ cover -- */
@@ -420,6 +433,28 @@
   width: 15px;
   height: 15px;
   font-size: 9px;
+}
+
+/* ---------------------------------------------------------------- keyframes -- */
+/* Defined locally: Turbopack scopes animation names per module, so the shared
+   rise / fadeIn entrance is declared in each file that uses it. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* --------------------------------------------------------------- responsive -- */

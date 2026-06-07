@@ -27,12 +27,15 @@
   text-transform: uppercase;
   color: var(--muted);
   transition: color 0.16s ease;
+  animation: rise 0.6s var(--ease-out-expo) both;
 }
 .back:hover {
   color: var(--fg);
 }
 
-/* ---- cover-hero: cover left, meta right, set low so the title can run big ---- */
+/* ---- cover-hero: cover left, meta right, set low so the title can run big.
+   The cover rises first; the meta column cascades line by line just behind it
+   (see .meta below), the same staggered entrance the landing masthead uses. ---- */
 .hero {
   display: grid;
   grid-template-columns: minmax(200px, 300px) 1fr;
@@ -51,6 +54,7 @@
   box-shadow:
     0 1px 1px rgba(40, 36, 18, 0.16),
     0 26px 56px rgba(40, 36, 18, 0.26);
+  animation: rise 0.75s var(--ease-out-expo) 0.05s backwards;
 }
 .coverImg {
   object-fit: cover;
@@ -70,6 +74,33 @@
       rgba(255, 255, 255, 0) 28%,
       rgba(0, 0, 0, 0.08) 100%
     );
+}
+
+/* The meta column rises line by line — series, title, author, details, blurb,
+   then the action(s). `backwards` keeps each line hidden only through its delay,
+   then releases transform so the download button's hover lift still works (it can
+   be a direct child of .meta on link-out books). nth-child past the actions just
+   shares the last beat, so the stagger holds whichever lines a book actually has. */
+.meta > * {
+  animation: rise 0.7s var(--ease-out-expo) backwards;
+}
+.meta > *:nth-child(1) {
+  animation-delay: 0.08s;
+}
+.meta > *:nth-child(2) {
+  animation-delay: 0.14s;
+}
+.meta > *:nth-child(3) {
+  animation-delay: 0.2s;
+}
+.meta > *:nth-child(4) {
+  animation-delay: 0.26s;
+}
+.meta > *:nth-child(5) {
+  animation-delay: 0.32s;
+}
+.meta > *:nth-child(n + 6) {
+  animation-delay: 0.38s;
 }
 
 .series {
@@ -183,6 +214,7 @@
 /* ---- embedded reader ---- */
 .reader {
   margin-top: clamp(40px, 7vh, 80px);
+  animation: rise 0.8s var(--ease-out-expo) 0.2s backwards;
 }
 
 .frame {
@@ -270,6 +302,8 @@
     0 26px 56px rgba(40, 36, 18, 0.26),
     inset 7px 0 16px rgba(0, 0, 0, 0.2);
   overflow: hidden;
+  /* mirrors the real cover's entrance so the no-art hero lands the same way */
+  animation: rise 0.75s var(--ease-out-expo) 0.05s backwards;
 }
 /* a soft dark scrim behind the centred title, so white type stays legible on
    ANY slot colour (light cream/blush slots included), not just the dark ones */
@@ -322,6 +356,9 @@
   line-height: 1.75;
   color: var(--fg);
   text-wrap: pretty;
+  /* one gentle rise for the whole article — a reading surface shouldn't reveal
+     paragraph by paragraph (the next line you want is never hidden) */
+  animation: rise 0.8s var(--ease-out-expo) 0.15s backwards;
 }
 .prose > * + * {
   margin-top: 1.25em;
@@ -422,6 +459,7 @@
   font-size: 13px;
   line-height: 1.6;
   color: var(--muted);
+  animation: fadeIn 0.7s var(--ease-out-quart) 0.25s backwards;
 }
 .sourceNote a {
   color: var(--fg);
@@ -440,5 +478,26 @@
   }
   .frame {
     height: 86vh;
+  }
+}
+
+/* Keyframes live with their module (Turbopack scopes animation names per file),
+   matching how heroRise / shelfRise sit with their owners on the landing. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

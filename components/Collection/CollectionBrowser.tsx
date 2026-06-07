@@ -72,6 +72,12 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
     setFormatSel([]);
   };
 
+  // Remount the results on the discrete, deliberate changes — switching view or
+  // toggling a format — so the set re-staggers in. Search is left out on purpose:
+  // typing keeps the same key, so the container reconciles and only fresh matches
+  // rise in, rather than the whole grid replaying its entrance on every keystroke.
+  const revealKey = `${layout}|${formatSel.join(",")}`;
+
   return (
     <div>
       {/* controls: search, format filter, view toggle (no catalog facet panel) */}
@@ -174,15 +180,25 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
           </button>
         </div>
       ) : layout === "grid" ? (
-        <div className={styles.grid}>
-          {results.map((e) => (
-            <BookCard key={e.book.slug} book={e.book} external={e.mode.where === "external"} />
+        <div key={revealKey} className={styles.grid}>
+          {results.map((e, i) => (
+            <BookCard
+              key={e.book.slug}
+              book={e.book}
+              external={e.mode.where === "external"}
+              index={i}
+            />
           ))}
         </div>
       ) : (
-        <div className={styles.list}>
-          {results.map((e) => (
-            <BookRow key={e.book.slug} book={e.book} external={e.mode.where === "external"} />
+        <div key={revealKey} className={styles.list}>
+          {results.map((e, i) => (
+            <BookRow
+              key={e.book.slug}
+              book={e.book}
+              external={e.mode.where === "external"}
+              index={i}
+            />
           ))}
         </div>
       )}

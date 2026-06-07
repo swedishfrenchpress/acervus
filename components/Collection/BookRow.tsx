@@ -4,14 +4,16 @@ import Cover from "./Cover";
 import styles from "./collection.module.css";
 
 // List item: a scannable row (thumb, title + author, year). The whole row is the
-// link to /book/[slug]; external link-outs carry the arrow on the thumb.
-type Props = { book: Book; external?: boolean };
+// link to /book/[slug]; external link-outs carry the arrow on the thumb. `index`
+// sets a per-item entrance delay so rows cascade in; see collection.module.css.
+type Props = { book: Book; external?: boolean; index?: number };
 
-export default function BookRow({ book, external }: Props) {
+export default function BookRow({ book, external, index = 0 }: Props) {
   return (
     <Link
       href={`/book/${book.slug}`}
       className={styles.row}
+      style={{ animationDelay: `${40 + Math.min(index, 14) * 26}ms` }}
       aria-label={
         (book.author ? `${book.title} by ${book.author}` : book.title) +
         (external ? ", opens an external site" : "")

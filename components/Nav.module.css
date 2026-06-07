@@ -6,6 +6,20 @@
   justify-content: space-between;
   gap: 24px;
   padding: 22px clamp(20px, 4vw, 56px);
+  /* The chrome settles in first and stays put — a plain fade, no rise, so it
+     reads as the frame the page rises into rather than another moving part. */
+  animation: fadeIn 0.7s var(--ease-out-quart) both;
+}
+
+/* Keyframes live with their module: Turbopack scopes animation names per file,
+   so a global definition wouldn't resolve here. */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .logo {
