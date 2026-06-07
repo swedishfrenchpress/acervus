@@ -28,6 +28,14 @@ export default function BookShelf() {
   const focus = useRef<number[]>([]); // focal weight — 1 for the book under the cursor
   const slow = useRef(0); // smoothed marquee slowdown, 0..1
 
+  // The quiet caption that names the focal book beneath the shelf. Refs let the
+  // proximity loop write text directly (no React re-render per frame); shownKey
+  // tracks which real book is currently named so the DOM is only touched on change.
+  const captionRef = useRef<HTMLDivElement>(null);
+  const capTitleRef = useRef<HTMLSpanElement>(null);
+  const capAuthorRef = useRef<HTMLSpanElement>(null);
+  const shownKey = useRef(-1);
+
   // Render the set three times so the track always overflows the viewport and
   // there is room to loop seamlessly.
   const rendered = [...books, ...books, ...books];
@@ -78,6 +86,30 @@ export default function BookShelf() {
             )?.dataset.bookIndex ?? -1
           )
         : -1;
+
+      // --- caption: the focal book quietly names itself beneath the shelf.
+      // The track renders `books` ×3, so hit % books.length is the real book.
+      // Placeholders (no title) leave the caption blank, so only real books
+      // announce themselves — and it eases in/out exactly as focus hands off
+      // from one book to the next under a still cursor. DOM is touched only when
+      // the named book changes, not every frame. ---
+      const realIdx = hit >= 0 ? hit % books.length : -1;
+      const focal = realIdx >= 0 ? books[realIdx] : null;
+      const key = focal?.title ? realIdx : -1;
+      if (key !== shownKey.current) {
+        shownKey.current = key;
+        const cap = captionRef.current;
+        if (cap) {
+          if (focal?.title) {
+            if (capTitleRef.current) capTitleRef.current.textContent = focal.title;
+            if (capAuthorRef.current)
+              capAuthorRef.current.textContent = focal.author ?? "";
+            cap.classList.add(styles.captionShow);
+          } else {
+            cap.classList.remove(styles.captionShow);
+          }
+        }
+      }
 
       // --- compute eased targets: only the book under the cursor reacts
       // (target 1); every other book eases back to rest (target 0). ---
@@ -217,6 +249,13 @@ export default function BookShelf() {
             })}
           </div>
         </div>
+      </div>
+      {/* Flat caption, OUTSIDE the 3D .tilt so it reads upright. Decorative: the
+          linked book's aria-label already names it, so this is aria-hidden, and
+          pointer-events:none keeps it from ever swallowing a tap. */}
+      <div className={styles.caption} ref={captionRef} aria-hidden>
+        <span className={styles.captionTitle} ref={capTitleRef} />
+        <span className={styles.captionAuthor} ref={capAuthorRef} />
       </div>
     </div>
   );

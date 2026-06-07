@@ -194,6 +194,53 @@ img.cover {
   background: linear-gradient(#efe9da, #d4ccb6);
 }
 
+/* ---- focus caption ----
+   The focal real book names itself in a quiet line beneath the row. A flat
+   label (Inter, inherited from body) sat OUTSIDE .tilt so it never inherits the
+   3D rotation. The proximity loop toggles .captionShow; placeholders leave the
+   spans blank. No background, no card — it just surfaces from the paper. The
+   whole focus interaction is off under reduced motion (the loop returns early),
+   so the caption simply never appears there. */
+.caption {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(10px, 2.2vh, 24px);
+  z-index: 3;
+  max-width: min(86vw, 560px);
+  padding: 0 16px;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition: opacity 0.34s var(--ease-out-quart),
+    transform 0.34s var(--ease-out-quart);
+}
+.captionShow {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+.captionTitle {
+  color: var(--fg);
+  font-weight: 500;
+}
+.captionAuthor {
+  color: var(--muted);
+}
+/* leading middot, drawn only when there's an author to separate */
+.captionAuthor::before {
+  content: "·";
+  margin: 0 0.55ch;
+  color: var(--muted);
+}
+.captionAuthor:empty {
+  display: none;
+}
+
 @keyframes shelfRise {
   from {
     opacity: 0;

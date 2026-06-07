@@ -1,0 +1,114 @@
+/* The 404 surface, matching the book page's paper stage so a missing page still
+   feels like the same place. Keyframes (rise) live here — Turbopack scopes
+   animation names per module, the same way the book and collection routes keep
+   their own copy. */
+.shell {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: hidden;
+  background:
+    radial-gradient(125% 70% at 78% -4%, var(--bg-tint) 0%, var(--bg) 52%),
+    var(--bg);
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 1180px;
+  min-height: 72vh;
+  margin: 0 auto;
+  padding: clamp(40px, 10vh, 120px) clamp(20px, 5vw, 56px)
+    clamp(80px, 12vh, 140px);
+}
+
+.kicker {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  animation: rise 0.6s var(--ease-out-expo) both;
+}
+
+.title {
+  margin-top: 18px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-weight: 500;
+  font-size: clamp(2.75rem, 7vw, 5.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--fg);
+  text-wrap: balance;
+  animation: rise 0.7s var(--ease-out-expo) 0.08s backwards;
+}
+
+.body {
+  margin-top: 24px;
+  max-width: 46ch;
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--muted);
+  text-wrap: pretty;
+  animation: rise 0.7s var(--ease-out-expo) 0.16s backwards;
+}
+
+/* Back — the landing CTA's dimensional dark plate, the single clear way out of a
+   dead end. `backwards` (not forwards) releases the transform once the entrance
+   ends, so the hover lift still works. */
+.back {
+  display: inline-flex;
+  align-items: center;
+  height: 50px;
+  margin-top: 38px;
+  padding: 0 26px;
+  border-radius: 5px;
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-feature-settings: "calt" 1;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--cta-fg);
+  background: var(--cta-bg);
+  border: 1px solid var(--cta-border);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 1px 1px rgba(40, 36, 18, 0.2),
+    0 6px 14px rgba(40, 36, 18, 0.24);
+  transition: transform 0.16s var(--ease-out-expo), box-shadow 0.16s ease;
+  animation: rise 0.7s var(--ease-out-expo) 0.24s backwards;
+}
+.back:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+    0 12px 24px rgba(40, 36, 18, 0.28);
+}
+.back:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 2px 7px rgba(0, 0, 0, 0.55),
+    0 1px 2px rgba(40, 36, 18, 0.2);
+}
+.back:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

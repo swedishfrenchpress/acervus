@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import Colophon from "@/components/Colophon";
 import "./globals.css";
 
 const inter = Inter({
@@ -71,6 +72,8 @@ export default function RootLayout({
         {/* First child of <body>: runs during parse, before any content paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         {children}
+        {/* Renders nothing — logs a quiet colophon to the console, once. */}
+        <Colophon />
       </body>
     </html>
   );
