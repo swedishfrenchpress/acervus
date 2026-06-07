@@ -27,6 +27,8 @@ export type Book = {
   // --- how the book is read (priority: pdf → external → reproduced text) ---
   /** PDF path, served from /public; reads inline / opens in a tab. */
   pdf?: string;
+  /** EPUB path, served from /public; offered as an alternate download beside the PDF. */
+  epub?: string;
   /** Original URL the in-site prose was reproduced from (drives the source credit). */
   source?: string;
   /** Human label for that source, e.g. "activism.net", "EFF", "Phrack 1:7". */
@@ -248,6 +250,22 @@ const DATA: Array<Omit<Book, "series" | "t">> = [
       "beautiful: rarity, fingerprints, and fractals tied to the validity of the " +
       "cash itself.",
     year: 1994,
+  },
+  {
+    slug: "21-lessons",
+    title: "21 Lessons",
+    author: "Gigi",
+    color: "#f7931a", // bitcoin orange
+    h: 232,
+    pdf: "/books/21-lessons.pdf",
+    epub: "/books/21-lessons.epub",
+    description:
+      "Gigi's distillation of the Bitcoin rabbit hole into twenty-one short lessons, " +
+      "each meeting at the seam of economics, cryptography, and philosophy. First " +
+      "written as the essay series “What I've Learned From Bitcoin,” gathered and " +
+      "revised here, and released under CC BY-SA 4.0 on a value-for-value basis.",
+    year: 2019,
+    pages: 155,
   },
 ];
 

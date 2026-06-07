@@ -107,8 +107,13 @@ export default async function BookPage({ params }: Params) {
                 >
                   Open the PDF ↗
                 </a>
+                {book.epub && (
+                  <a className={styles.download} href={book.epub} download>
+                    Download EPUB
+                  </a>
+                )}
                 <a className={styles.altLink} href={book.pdf} download>
-                  Download
+                  {book.epub ? "Download PDF" : "Download"}
                 </a>
               </div>
             ) : book.external ? (
