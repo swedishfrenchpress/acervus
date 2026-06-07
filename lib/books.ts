@@ -29,6 +29,10 @@ export type Book = {
   pdf?: string;
   /** EPUB path, served from /public; offered as an alternate download beside the PDF. */
   epub?: string;
+  /** Author's Lightning address (LUD-16) for value-for-value support. When set, the
+   *  book page shows a tip block with the address + a scannable QR at
+   *  /public/books/<slug>-lightning.svg (a static LNURL QR, generated once). */
+  lightning?: string;
   /** Original URL the in-site prose was reproduced from (drives the source credit). */
   source?: string;
   /** Human label for that source, e.g. "activism.net", "EFF", "Phrack 1:7". */
@@ -259,6 +263,7 @@ const DATA: Array<Omit<Book, "series" | "t">> = [
     h: 232,
     pdf: "/books/21-lessons.pdf",
     epub: "/books/21-lessons.epub",
+    lightning: "dergigi@primal.net",
     description:
       "Gigi's distillation of the Bitcoin rabbit hole into twenty-one short lessons, " +
       "each meeting at the seam of economics, cryptography, and philosophy. First " +

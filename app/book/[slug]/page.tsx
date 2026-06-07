@@ -126,6 +126,26 @@ export default async function BookPage({ params }: Params) {
                 Read at {book.externalLabel} ↗
               </a>
             ) : null}
+
+            {book.lightning && (
+              <aside className={styles.v4v}>
+                <a
+                  className={styles.v4vQr}
+                  href={`lightning:${book.lightning}`}
+                  aria-label={`Tip ${book.author} over Lightning: ${book.lightning}`}
+                >
+                  {/* Static LNURL QR generated once; white-backed so it scans in
+                      either theme. Decorative — the address link names it. */}
+                  <img src={`/books/${slug}-lightning.svg`} alt="" />
+                </a>
+                <div className={styles.v4vBody}>
+                  <p className={styles.v4vLabel}>Value for value</p>
+                  <a className={styles.v4vAddr} href={`lightning:${book.lightning}`}>
+                    {book.lightning}
+                  </a>
+                </div>
+              </aside>
+            )}
           </div>
         </header>
 
