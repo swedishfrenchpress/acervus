@@ -140,9 +140,15 @@ export default function BookShelf() {
               const setRef = (el: HTMLElement | null) => {
                 if (el) bookEls.current[i] = el;
               };
+              // A real cover gets the poster's exact proportions so its art
+              // fills the face edge-to-edge with nothing cropped: height is
+              // derived from --book-w (so it holds at every breakpoint), biased
+              // a hair taller than the ~1364×2000 art so any sub-pixel trim
+              // lands on the side margins, never the title/author. Placeholders
+              // keep their varied, mismatched heights.
               const style = {
                 "--cover": b.color,
-                "--h": `${b.h}px`,
+                "--h": b.cover ? `calc(var(--book-w) * 1.47)` : `${b.h}px`,
                 "--t": `${b.t}px`,
               } as React.CSSProperties;
               const faces = (

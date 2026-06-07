@@ -97,8 +97,9 @@
   overflow: hidden;
 }
 
-/* real cover image — rides the same .cover face (centered above); just fill the
-   box without distorting the 1368×2000 art (crops a sliver top/bottom). */
+/* real cover image — rides the same .cover face (centered above). The face is
+   sized to the art's ~1364×2000 aspect (see --h in BookShelf.tsx), so cover
+   fills it edge-to-edge with no meaningful crop. */
 img.cover {
   object-fit: cover;
   object-position: center;
