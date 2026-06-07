@@ -57,8 +57,7 @@
   height: var(--h);
   margin-left: calc(-1 * var(--book-overlap));
   transform-style: preserve-3d;
-  transform: translateX(var(--push, 0px)) translateY(var(--lift, 0px))
-    translateZ(var(--pop, 0px))
+  transform: translateY(var(--lift, 0px)) translateZ(var(--pop, 0px))
     rotateY(calc(var(--book-ry) + var(--turn, 0deg))) scale(var(--scale, 1));
   will-change: transform;
 }
