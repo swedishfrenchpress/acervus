@@ -9,7 +9,7 @@ and names itself beneath the shelf), over a light "paper" background.
 
 Everything in the collection is public domain — nothing to take down. For
 everything else, there's [Anna's Archive](https://annas-archive.gl/),
-[LibGen](https://libgen.is), and the torrents.
+[LibGen](https://shadowlibraries.github.io/DirectDownloads/libgen/), and the torrents.
 
 ## Stack
 

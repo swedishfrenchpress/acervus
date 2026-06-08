@@ -22,7 +22,7 @@ export default function Intro() {
           Anna&rsquo;s Archive
         </a>
         ,{" "}
-        <a href="https://libgen.is" target="_blank" rel="noreferrer">
+        <a href="https://shadowlibraries.github.io/DirectDownloads/libgen/" target="_blank" rel="noreferrer">
           LibGen
         </a>
         , and the torrents.

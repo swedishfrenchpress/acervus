@@ -343,6 +343,23 @@ const DATA: Array<Omit<Book, "series" | "t">> = [
     year: 2002,
     pages: 8,
   },
+  {
+    slug: "farewell-to-westphalia",
+    title: "Farewell to Westphalia",
+    author: "Jarrad Hope & Peter Ludlow",
+    color: "#1f3a4d", // deep steel
+    h: 234,
+    pdf: "/books/farewell-to-westphalia.pdf",
+    description:
+      "Jarrad Hope and Peter Ludlow argue that the sovereign nation state — fixed in " +
+      "place by the 1648 Peace of Westphalia — is a 380-year-old human technology, and " +
+      "perhaps no longer the best one available. A deep dive into how blockchains and " +
+      "smart contracts might be applied to cooperative human governance, sketching a " +
+      "voluntary, post-nation-state order. Published by Logos Press Engine under " +
+      "CC BY-SA 4.0.",
+    year: 2025,
+    pages: 381,
+  },
 ];
 
 export const books: Book[] = DATA.map((b) => ({ ...b, series: SERIES, t: SPINE }));
