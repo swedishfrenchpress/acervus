@@ -24,11 +24,11 @@ const DESCRIPTION =
   "A personal collection of good public-domain reads. Free to read, free to keep.";
 
 // metadataBase resolves the file-based opengraph-image / twitter-image (app/)
-// to absolute https://www.cypherpunkbooks.com URLs so crawlers index them. The
+// to absolute https://www.cypherpunklibrary.com URLs so crawlers index them. The
 // title template lets child pages set just their own title and inherit the
 // " — The Cypherpunk Library" suffix.
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.cypherpunkbooks.com"),
+  metadataBase: new URL("https://www.cypherpunklibrary.com"),
   title: {
     default: "The Cypherpunk Library",
     template: "%s · The Cypherpunk Library",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "The Cypherpunk Library",
     description: DESCRIPTION,
-    url: "https://www.cypherpunkbooks.com",
+    url: "https://www.cypherpunklibrary.com",
     siteName: "The Cypherpunk Library",
     type: "website",
     locale: "en_US",
