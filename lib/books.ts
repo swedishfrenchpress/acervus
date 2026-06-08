@@ -226,21 +226,6 @@ const DATA: Array<Omit<Book, "series" | "t">> = [
     year: 2014,
   },
   {
-    slug: "the-temporary-autonomous-zone",
-    title: "T.A.Z.",
-    author: "Hakim Bey",
-    color: "#243b6b", // cobalt
-    h: 238,
-    external:
-      "https://theanarchistlibrary.org/library/hakim-bey-t-a-z-the-temporary-autonomous-zone-ontological-anarchy-poetic-terrorism",
-    externalLabel: "The Anarchist Library",
-    description:
-      "Hakim Bey’s anti-copyright classic on the Temporary Autonomous Zone: the " +
-      "uprising that evades the map, the pirate utopia of the network age. Read the " +
-      "full text at The Anarchist Library.",
-    year: 1991,
-  },
-  {
     slug: "the-beauty-of-ecash",
     title: "The Beauty of eCash",
     author: "Hal Finney",
@@ -271,6 +256,92 @@ const DATA: Array<Omit<Book, "series" | "t">> = [
       "revised here, and released under CC BY-SA 4.0 on a value-for-value basis.",
     year: 2019,
     pages: 155,
+  },
+  {
+    slug: "a-lodging-of-wayfaring-men",
+    title: "A Lodging of Wayfaring Men",
+    author: "Paul Rosenberg",
+    color: "#2a1f5e", // deep indigo
+    h: 228,
+    pdf: "/books/a-lodging-of-wayfaring-men.pdf",
+    description:
+      "A novel. A loose network of programmers, traders, and ordinary people build " +
+      "a free society in the unmapped space of the early internet: anonymous, " +
+      "encrypted, voluntary, beyond the reach of states. Through their story " +
+      "Rosenberg dramatizes the cypherpunk wager: that cryptography and conscience " +
+      "can carve out room for human freedom, and asks what it costs and what it's " +
+      "worth.",
+    year: 2003,
+    pages: 452,
+  },
+  {
+    slug: "fog-of-cryptowar",
+    title: "Fog of CryptoWar",
+    author: "Jonathan 'smuggler' Logan",
+    color: "#2e3a40", // gunmetal
+    h: 238,
+    source: "https://opaquelink.sirion.io/post/fog_of_cryptowar/",
+    sourceLabel: "opaquelink.sirion.io",
+    description:
+      "Jonathan 'smuggler' Logan argues the second Crypto War is being fought in a " +
+      "fog: the public debate over “banning encryption” is a straw man, while " +
+      "governments quietly pursue plaintext access through vendor pressure, lawful " +
+      "hacking, weakened defaults, and metadata retention. A field map of the real " +
+      "battleground, and why absolutist “you can't ban math” arguments lose the " +
+      "policy fight.",
+    year: 2017,
+  },
+  {
+    slug: "libertaria-in-cyberspace",
+    title: "Libertaria in Cyberspace",
+    author: "Timothy C. May",
+    color: "#10402c", // deep emerald
+    h: 216,
+    source: "https://nakamotoinstitute.org/library/libertaria-in-cyberspace/",
+    sourceLabel: "Nakamoto Institute",
+    description:
+      "May's 1992 posting to the Extropians list on why a computer-mediated network " +
+      "is more hospitable to a “crypto anarchy” libertarian order than any island, " +
+      "oil rig, or floating data haven: physical Libertarias are too exposed to the " +
+      "world's powers, but distributed systems have no nexus to knock out. An " +
+      "arbitrarily large number of separate “nations” can coexist in cyberspace, " +
+      "entered and left at will.",
+    year: 1992,
+  },
+  {
+    slug: "measuring-freenet-in-the-wild",
+    title: "Measuring Freenet in the Wild",
+    author: "Stefanie Roos et al.",
+    color: "#4a1d2a", // oxblood
+    h: 230,
+    pdf: "/books/measuring-freenet-in-the-wild.pdf",
+    description:
+      "An empirical study of Freenet, the decentralized, censorship-resistant " +
+      "publication system: an extensive measurement campaign and code analysis that " +
+      "maps why content is slow and often unreachable. The authors find the " +
+      "topology-control mechanism is suboptimal for routing, and that Freenet's " +
+      "several tens of thousands of users stay online far longer than peers on other " +
+      "P2P networks. By Stefanie Roos, Benjamin Schiller, Stefan Hacker, and " +
+      "Thorsten Strufe; presented at PETS 2014.",
+    year: 2014,
+    pages: 20,
+  },
+  {
+    slug: "ideal-money-and-asymptotically-ideal-money",
+    title: "Ideal Money and Asymptotically Ideal Money",
+    author: "John F. Nash Jr.",
+    color: "#4a3713", // antique bronze
+    h: 222,
+    pdf: "/books/ideal-money-and-asymptotically-ideal-money.pdf",
+    description:
+      "The game theorist and Nobel laureate's argument that money becomes “ideal” " +
+      "when its value holds steady over time: a stable standard of measurement, not " +
+      "a thing managed by inflationary discretion. Nash proposes pegging currency to " +
+      "an objective index of prices, and sketches “asymptotically ideal money” as " +
+      "the practical path: currencies that, through competition and credible policy, " +
+      "converge toward a reliable long-term store of value.",
+    year: 2002,
+    pages: 8,
   },
 ];
 

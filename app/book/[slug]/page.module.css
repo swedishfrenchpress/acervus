@@ -397,7 +397,9 @@
 }
 
 .prose h2,
-.prose h3 {
+.prose h3,
+.prose h4,
+.prose h5 {
   font-family: var(--font-display), system-ui, sans-serif;
   font-feature-settings: "calt" 1;
   font-weight: 500;
@@ -410,6 +412,19 @@
 }
 .prose h3 {
   font-size: clamp(1.2rem, 2.2vw, 1.4rem);
+}
+/* deeper subheads in longer reproduced texts (e.g. Fog of CryptoWar) — smaller,
+   and h5 set in the body face so the hierarchy stays legible past three levels. */
+.prose h4 {
+  font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+  margin-top: 1.5em;
+}
+.prose h5 {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  margin-top: 1.4em;
 }
 
 .prose blockquote {

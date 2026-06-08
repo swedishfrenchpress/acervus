@@ -14,6 +14,8 @@ import TheBeautyOfECash from "./the-beauty-of-ecash";
 import MeditationsOnCypherpunkNightmares from "./meditations-on-cypherpunk-nightmares";
 import DefinitionOfDemocraticCivilization from "./definition-of-democratic-civilization";
 import YourSecretRightToCash from "./your-secret-right-to-cash";
+import FogOfCryptowar from "./fog-of-cryptowar";
+import LibertariaInCyberspace from "./libertaria-in-cyberspace";
 
 export const texts: Record<string, ComponentType> = {
   "a-cypherpunks-manifesto": ACypherpunksManifesto,
@@ -26,4 +28,6 @@ export const texts: Record<string, ComponentType> = {
   "meditations-on-cypherpunk-nightmares": MeditationsOnCypherpunkNightmares,
   "definition-of-democratic-civilization": DefinitionOfDemocraticCivilization,
   "your-secret-right-to-cash": YourSecretRightToCash,
+  "fog-of-cryptowar": FogOfCryptowar,
+  "libertaria-in-cyberspace": LibertariaInCyberspace,
 };
