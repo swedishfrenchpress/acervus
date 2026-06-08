@@ -63,7 +63,10 @@
   transform-style: preserve-3d;
   transform: translateY(var(--lift, 0px)) translateZ(var(--pop, 0px))
     rotateY(var(--book-ry)) scale(var(--scale, 1));
-  will-change: transform;
+  /* No per-book will-change: ~60 books each forcing its own compositor layer is
+     a heavy, Firefox-hostile layer explosion. The focal book repaints anyway
+     (its --foc shadow/filter change), so a layer buys it nothing; the marquee's
+     own layer lives on .track. */
 }
 
 .book:first-child {

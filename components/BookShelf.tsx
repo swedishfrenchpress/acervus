@@ -14,6 +14,7 @@ const POP = 48; // px: lift it forward along the shelf normal so it sits cleanly
 const SCALE = 0.06; // a small scale bump as it rises
 const SLOW = 1; // how much peak focus slows the marquee (1 = full stop)
 const EASE = 0.16; // per-frame approach to target — the "breathing" smoothness
+const HIT_EVERY = 3; // re-run the 3D hit-test only every Nth frame under a still cursor (~20×/s)
 
 export default function BookShelf() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -23,6 +24,9 @@ export default function BookShelf() {
 
   // Pointer in client coords; null when the cursor isn't over the shelf.
   const pointer = useRef<{ x: number; y: number } | null>(null);
+  // Set when the pointer moves so the loop hit-tests that frame instead of
+  // waiting for its throttle window — keeps the initial grab feeling instant.
+  const pointerMoved = useRef(false);
 
   // Smoothed per-book state, eased toward target every frame.
   const focus = useRef<number[]>([]); // focal weight — 1 for the book under the cursor
@@ -52,6 +56,9 @@ export default function BookShelf() {
 
     let raf = 0;
     let offset = 0;
+    let frame = 0;
+    let lastHit = -1; // last hit-test result, reused on throttled frames
+    const active = new Set<number>(); // book indices currently easing in or out
 
     // The exact width of one set = the layout distance between the first book
     // of set 1 and the first book of set 2. Using offsetLeft (not scrollWidth)
@@ -74,22 +81,28 @@ export default function BookShelf() {
       const els = bookEls.current;
       const p = pointer.current;
       const f = focus.current;
+      frame++;
 
-      // --- read: ask the browser which book is actually under the cursor. This
-      // honours the 3D tilt, overlap and occlusion, so the focal book is exactly
-      // the one you see there — and it re-checks every frame, so focus hands off
-      // correctly as the marquee slides books under a still cursor. (One hit-test
-      // is the frame's only forced layout; all writes happen below.) ---
-      const hit = p
-        ? Number(
-            (document.elementFromPoint(p.x, p.y) as HTMLElement | null)?.closest<HTMLElement>(
-              "[data-book-index]"
-            )?.dataset.bookIndex ?? -1
-          )
-        : -1;
+      // --- read (throttled): elementFromPoint forces a synchronous layout and,
+      // through this tilted preserve-3d subtree, is by far the priciest op of the
+      // frame — Firefox's 3D hit-testing especially. So re-test only when the
+      // pointer actually moved, or a few times a second so focus still hands off
+      // as the marquee slides books under a still cursor. The EASE smoothing below
+      // makes the throttled cadence invisible; in between we reuse the last hit. ---
+      if (!p) {
+        lastHit = -1;
+      } else if (pointerMoved.current || frame % HIT_EVERY === 0) {
+        pointerMoved.current = false;
+        lastHit = Number(
+          (document.elementFromPoint(p.x, p.y) as HTMLElement | null)?.closest<HTMLElement>(
+            "[data-book-index]"
+          )?.dataset.bookIndex ?? -1
+        );
+      }
+      const hit = lastHit;
 
       // --- caption: the focal book quietly names itself beneath the shelf.
-      // The track renders `books` ×3, so hit % books.length is the real book.
+      // The track renders `books` ×4, so hit % books.length is the real book.
       // Placeholders (no title) leave the caption blank, so only real books
       // announce themselves — and it eases in/out exactly as focus hands off
       // from one book to the next under a still cursor. DOM is touched only when
@@ -112,30 +125,47 @@ export default function BookShelf() {
         }
       }
 
-      // --- compute eased targets: only the book under the cursor reacts
-      // (target 1); every other book eases back to rest (target 0). ---
+      // The focal book must be in motion this frame.
+      if (hit >= 0) active.add(hit);
+
+      // --- ease + write only the books actually in motion (writes only). A book
+      // at rest is skipped entirely, so in steady state just the focal book — and
+      // any one easing back out — touch the DOM; the other ~60 covers keep their
+      // shadow/filter untouched instead of repainting every frame. The focal book
+      // rises (--lift) and lifts forward along the shelf normal (--pop), keeping
+      // its shelf lean (no turn → stays parallel, so it never clips). ---
       let peak = 0;
-      for (let i = 0; i < els.length; i++) {
-        const targetF = i === hit ? 1 : 0;
-        f[i] = lerp(f[i] ?? 0, targetF, EASE);
-        if (f[i] > peak) peak = f[i];
+      for (const i of active) {
+        const el = els[i];
+        const target = i === hit ? 1 : 0;
+        const fi = lerp(f[i] ?? 0, target, EASE);
+
+        // Settled back to rest: write the rest pose once, then drop it from the
+        // active set so it stops being touched until it's focused again.
+        if (target === 0 && fi < 0.005) {
+          f[i] = 0;
+          if (el) {
+            el.style.setProperty("--lift", "0px");
+            el.style.setProperty("--pop", "0px");
+            el.style.setProperty("--scale", "1");
+            el.style.setProperty("--foc", "0");
+            el.style.zIndex = "";
+          }
+          active.delete(i);
+          continue;
+        }
+
+        f[i] = fi;
+        if (fi > peak) peak = fi;
+        if (el) {
+          el.style.setProperty("--lift", `${(-LIFT * fi).toFixed(2)}px`);
+          el.style.setProperty("--pop", `${(POP * fi).toFixed(2)}px`);
+          el.style.setProperty("--scale", (1 + SCALE * fi).toFixed(3));
+          el.style.setProperty("--foc", fi.toFixed(3));
+          el.style.zIndex = fi > 0.02 ? String(5 + Math.round(fi * 12)) : "";
+        }
       }
       slow.current = lerp(slow.current, p ? peak : 0, EASE);
-
-      // --- write transforms (writes only). The focal book rises (--lift) and
-      // lifts forward along the shelf normal (--pop) so it sits cleanly in front
-      // of its still neighbours, keeping its shelf lean (no turn → stays parallel,
-      // so it never clips). ---
-      for (let i = 0; i < els.length; i++) {
-        const el = els[i];
-        if (!el) continue;
-        const fi = f[i];
-        el.style.setProperty("--lift", `${(-LIFT * fi).toFixed(2)}px`);
-        el.style.setProperty("--pop", `${(POP * fi).toFixed(2)}px`);
-        el.style.setProperty("--scale", (1 + SCALE * fi).toFixed(3));
-        el.style.setProperty("--foc", fi.toFixed(3));
-        el.style.zIndex = fi > 0.02 ? String(5 + Math.round(fi * 12)) : "";
-      }
 
       // Advance the marquee; it eases toward a near-stop as you focus a book,
       // then drifts back up to speed when the cursor leaves.
@@ -160,9 +190,11 @@ export default function BookShelf() {
   // gesture turning into a page scroll) hands the marquee back.
   const onMove = (e: React.PointerEvent) => {
     pointer.current = { x: e.clientX, y: e.clientY };
+    pointerMoved.current = true;
   };
   const onDown = (e: React.PointerEvent) => {
     pointer.current = { x: e.clientX, y: e.clientY };
+    pointerMoved.current = true;
   };
   const onLeave = () => {
     pointer.current = null;
