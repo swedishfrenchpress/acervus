@@ -360,6 +360,25 @@ const DATA: Array<Omit<Book, "series" | "t">> = [
     year: 2025,
     pages: 381,
   },
+  {
+    slug: "against-intellectual-property",
+    title: "Against Intellectual Property",
+    author: "N. Stephan Kinsella",
+    color: "#4a1538", // dark mulberry
+    h: 226,
+    pdf: "/books/against-intellectual-property.pdf",
+    description:
+      "N. Stephan Kinsella's argument that intellectual property is incompatible " +
+      "with genuine property rights. Patents and copyrights, he holds, are " +
+      "state-granted monopolies over ideal objects — patterns of information that, " +
+      "unlike scarce physical things, everyone can use at once — so enforcing them " +
+      "means letting one person seize control of another's tangible property and " +
+      "body. Building from scarcity and homesteading, he works toward a principled " +
+      "rejection of patent, copyright, trademark, and trade secret alike. Published " +
+      "in the Journal of Libertarian Studies by the Ludwig von Mises Institute.",
+    year: 2001,
+    pages: 53,
+  },
 ];
 
 export const books: Book[] = DATA.map((b) => ({ ...b, series: SERIES, t: SPINE }));
