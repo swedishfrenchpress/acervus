@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import Colophon from "@/components/Colophon";
+import SiteFooter from "@/components/SiteFooter";
 import "./globals.css";
 
 const inter = Inter({
@@ -77,6 +78,9 @@ export default function RootLayout({
         {/* First child of <body>: runs during parse, before any content paints. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         {children}
+        {/* Closes every route on the body's paper, just below each page's
+            full-height stage — a short scroll past the landing's shelf. */}
+        <SiteFooter />
         {/* Renders nothing — logs a quiet colophon to the console, once. */}
         <Colophon />
         <Analytics />

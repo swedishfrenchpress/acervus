@@ -1,0 +1,32 @@
+/* Sits on the body's paper (var(--bg)) as a sibling below each route's stage,
+   which fades to that same --bg at its bottom edge. The nested Celestial carries
+   the same grain past the seam so the texture is continuous; isolate keeps that
+   grain layer's stacking context inside the footer. Quiet by design: one muted
+   address, centred, with room around it. */
+.footer {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  justify-content: center;
+  padding: 30px clamp(20px, 4vw, 56px) 34px;
+}
+
+/* Echoes the chrome links (Nav, "back to the shelf"): muted at rest, lifting to
+   full ink on hover — but kept lowercase and lightly tracked, since it's an
+   address to read, not a label. Lifted above the grain layer (z-index 0). */
+.email {
+  position: relative;
+  z-index: 1;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  transition: color 0.16s ease;
+}
+.email:hover {
+  color: var(--fg);
+}
+.email:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
