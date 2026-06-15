@@ -9,34 +9,56 @@ import {
   type ReadingKind,
   type ReadingMode,
 } from "@/lib/format";
+import { ui, frBooks, type Locale } from "@/lib/i18n";
 import BookCard from "./BookCard";
 import BookRow from "./BookRow";
 import styles from "./collection.module.css";
 
-type Props = { books: Book[]; textSlugs: string[] };
+type Props = {
+  books: Book[];
+  textSlugs: string[];
+  frSlugs: string[];
+  locale: Locale;
+};
 type Layout = "grid" | "list";
-type Entry = { book: Book; mode: ReadingMode };
+// `title` is the display title (the French override on /fr/collection, else the
+// English title); `frTitle` is added as a search key so a French title still
+// matches when present.
+type Entry = { book: Book; mode: ReadingMode; title: string; frTitle?: string };
 
 // Toggle a value in/out of a selection array, immutably.
 function toggle<T>(arr: T[], value: T): T[] {
   return arr.includes(value) ? arr.filter((v) => v !== value) : [...arr, value];
 }
 
-export default function CollectionBrowser({ books, textSlugs }: Props) {
+export default function CollectionBrowser({
+  books,
+  textSlugs,
+  frSlugs,
+  locale,
+}: Props) {
   const [query, setQuery] = useState("");
   const [layout, setLayout] = useState<Layout>("grid"); // grid is the landing view
   const [formatSel, setFormatSel] = useState<ReadingKind[]>([]);
 
+  const t = ui[locale].browseView;
   const textSet = useMemo(() => new Set(textSlugs), [textSlugs]);
+  const frSet = useMemo(() => new Set(frSlugs), [frSlugs]);
 
-  // Classify each book once; cards/rows reuse the reading mode.
+  // Classify each book once; cards/rows reuse the reading mode. On /fr/collection
+  // the French title (where it exists) becomes the display + an extra search key.
   const entries = useMemo<Entry[]>(
     () =>
-      books.map((book) => ({
-        book,
-        mode: getReadingMode(book, textSet.has(book.slug ?? "")),
-      })),
-    [books, textSet],
+      books.map((book) => {
+        const frTitle = locale === "fr" ? frBooks[book.slug]?.title : undefined;
+        return {
+          book,
+          mode: getReadingMode(book, textSet.has(book.slug ?? "")),
+          title: frTitle ?? book.title,
+          frTitle,
+        };
+      }),
+    [books, textSet, locale],
   );
 
   const formats = useMemo(() => buildFormatFacet(books, textSlugs), [books, textSlugs]);
@@ -46,6 +68,7 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
       new Fuse(entries, {
         keys: [
           { name: ["book", "title"], weight: 0.55 },
+          { name: "frTitle", weight: 0.55 },
           { name: ["book", "author"], weight: 0.25 },
           { name: ["book", "series"], weight: 0.05 },
           { name: ["book", "description"], weight: 0.15 },
@@ -97,13 +120,13 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
             <path d="m20 20-3.2-3.2" />
           </svg>
           <label htmlFor="collection-search" className={styles.srOnly}>
-            Search the collection
+            {t.searchLabel}
           </label>
           <input
             id="collection-search"
             type="search"
             className={styles.searchInput}
-            placeholder="Search by title, author, idea…"
+            placeholder={t.searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             autoComplete="off"
@@ -111,7 +134,7 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
         </div>
 
         <div className={styles.toolbar}>
-          <div className={styles.formats} role="group" aria-label="Filter by format">
+          <div className={styles.formats} role="group" aria-label={t.filterLabel}>
             {formats.map((f) => {
               const on = formatSel.includes(f.value);
               return (
@@ -122,19 +145,19 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
                   aria-pressed={on}
                   onClick={() => setFormatSel((s) => toggle(s, f.value))}
                 >
-                  {f.value}
+                  {t.formats[f.value]}
                   <span className={styles.fmtCount}>{f.count}</span>
                 </button>
               );
             })}
           </div>
 
-          <div className={styles.viewToggle} role="group" aria-label="View">
+          <div className={styles.viewToggle} role="group" aria-label={t.viewLabel}>
             <button
               type="button"
               className={`${styles.viewBtn} ${layout === "grid" ? styles.viewBtnOn : ""}`}
               aria-pressed={layout === "grid"}
-              aria-label="Grid view"
+              aria-label={t.gridView}
               onClick={() => setLayout("grid")}
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -148,7 +171,7 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
               type="button"
               className={`${styles.viewBtn} ${layout === "list" ? styles.viewBtnOn : ""}`}
               aria-pressed={layout === "list"}
-              aria-label="List view"
+              aria-label={t.listView}
               onClick={() => setLayout("list")}
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -161,12 +184,12 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
       </div>
 
       <p className={styles.count} aria-live="polite">
-        {results.length} {results.length === 1 ? "book" : "books"}
+        {results.length} {results.length === 1 ? t.one : t.many}
         {filtered && results.length > 0 && (
           <>
             {" · "}
             <button type="button" className={styles.clear} onClick={clearAll}>
-              Clear
+              {t.clear}
             </button>
           </>
         )}
@@ -174,9 +197,12 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
 
       {results.length === 0 ? (
         <div className={styles.empty}>
-          <p>No books match your search{formatSel.length ? " and filter" : ""}.</p>
+          <p>
+            {t.noMatch}
+            {formatSel.length ? t.andFilter : ""}.
+          </p>
           <button type="button" className={styles.clear} onClick={clearAll}>
-            Clear search and filter
+            {t.clearAll}
           </button>
         </div>
       ) : layout === "grid" ? (
@@ -185,7 +211,10 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
             <BookCard
               key={e.book.slug}
               book={e.book}
+              title={e.title}
               external={e.mode.where === "external"}
+              hasFr={frSet.has(e.book.slug)}
+              locale={locale}
               index={i}
             />
           ))}
@@ -196,7 +225,10 @@ export default function CollectionBrowser({ books, textSlugs }: Props) {
             <BookRow
               key={e.book.slug}
               book={e.book}
+              title={e.title}
               external={e.mode.where === "external"}
+              hasFr={frSet.has(e.book.slug)}
+              locale={locale}
               index={i}
             />
           ))}
