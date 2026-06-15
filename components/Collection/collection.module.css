@@ -432,6 +432,38 @@
   font-size: 9px;
 }
 
+/* French-edition marker. On a grid cover it's a small corner chip (top-left, so
+   it never meets the external badge); in the list it's a quiet inline tag beside
+   the year (the 40px thumb is too small to read a chip). */
+.frBadge {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  height: 18px;
+  padding: 0 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #fff;
+  background: rgba(8, 7, 3, 0.58);
+  border-radius: 999px;
+}
+.frTag {
+  flex-shrink: 0;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
 /* ---------------------------------------------------------------- keyframes -- */
 /* Defined locally: Turbopack scopes animation names per module, so the shared
    rise / fadeIn entrance is declared in each file that uses it. */
