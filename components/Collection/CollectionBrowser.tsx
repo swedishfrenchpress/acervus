@@ -213,7 +213,7 @@ export default function CollectionBrowser({
               book={e.book}
               title={e.title}
               external={e.mode.where === "external"}
-              hasFr={frSet.has(e.book.slug)}
+              hasFr={locale === "fr" && frSet.has(e.book.slug)}
               locale={locale}
               index={i}
             />
@@ -227,7 +227,7 @@ export default function CollectionBrowser({
               book={e.book}
               title={e.title}
               external={e.mode.where === "external"}
-              hasFr={frSet.has(e.book.slug)}
+              hasFr={locale === "fr" && frSet.has(e.book.slug)}
               locale={locale}
               index={i}
             />
