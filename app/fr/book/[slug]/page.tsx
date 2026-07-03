@@ -77,7 +77,7 @@ export default async function FrBookPage({ params }: Params) {
       backHref="/fr"
       backLabel={ui.fr.back}
       untranslatedNote={translated ? undefined : ui.fr.notYetTranslated}
-      frSourceNote={fr?.sourceNote}
+      frSourceIntro={fr?.sourceIntro}
     />
   );
 }
