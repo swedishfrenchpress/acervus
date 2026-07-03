@@ -31,8 +31,9 @@ type Props = {
   backLabel: string;
   /** Set on a French page with no translation yet — shown above the English prose. */
   untranslatedNote?: string;
-  /** Translated attribution line; replaces the English "Reproduced from …" credit. */
-  frSourceNote?: string;
+  /** Translated attribution lead-in, shown before the linked source name;
+   *  replaces the English "Reproduced from …" credit. */
+  frSourceIntro?: string;
 };
 
 export default function BookView({
@@ -46,7 +47,7 @@ export default function BookView({
   backHref,
   backLabel,
   untranslatedNote,
-  frSourceNote,
+  frSourceIntro,
 }: Props) {
   // Book-length PDFs read badly trapped in a tall inline iframe, so we lead with
   // open/download and make the inline reader opt-in. Short ones (Finney's 7pp)
@@ -195,10 +196,17 @@ export default function BookView({
             >
               <Text />
             </article>
-            {(frSourceNote || book.source) && (
+            {(frSourceIntro || book.source) && (
               <footer className={styles.sourceNote}>
-                {frSourceNote ? (
-                  frSourceNote
+                {frSourceIntro ? (
+                  <>
+                    {frSourceIntro}
+                    <a href={book.source} target="_blank" rel="noreferrer">
+                      {book.sourceLabel}
+                    </a>
+                    . Texte du domaine public / librement diffusable, mis en
+                    page ici par la Cypherpunk Library.
+                  </>
                 ) : (
                   <>
                     Reproduced from{" "}
